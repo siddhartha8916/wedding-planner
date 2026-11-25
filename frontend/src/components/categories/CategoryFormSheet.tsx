@@ -77,7 +77,7 @@ export function CategoryFormSheet({
           id: editingCategory.id,
           payload: {
             name: values.name,
-            description: values.description || undefined,
+            description: values.description ?? '',
             icon: values.icon,
             allocatedBudget: values.allocatedBudget > 0 ? values.allocatedBudget : 0,
           },

@@ -1,3 +1,4 @@
+from pymongo import ReturnDocument
 from pymongo.asynchronous.database import AsyncDatabase
 
 from app.db import make_id, utc_now_iso
@@ -37,13 +38,12 @@ def doc_to_wedding(doc: dict) -> WeddingProfile:
 
 
 async def get_or_bootstrap_wedding(db: AsyncDatabase, user_id: str) -> dict:
-    existing = await db["weddings"].find_one({"userId": user_id})
-    if existing is not None:
-        return existing
-
-    fresh = _default_wedding_doc(user_id)
-    await db["weddings"].insert_one(fresh)
-    return fresh
+    return await db["weddings"].find_one_and_update(
+        {"userId": user_id},
+        {"$setOnInsert": _default_wedding_doc(user_id)},
+        upsert=True,
+        return_document=ReturnDocument.AFTER,
+    )
 
 
 async def save_wedding(

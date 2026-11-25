@@ -1,3 +1,6 @@
+from datetime import UTC, datetime, timedelta
+
+import jwt
 import pytest
 
 
@@ -61,3 +64,30 @@ async def test_deleted_user_token_returns_401(client, test_db):
         headers={"Authorization": f"Bearer {token}"},
     )
     assert me.status_code == 401
+
+
+@pytest.mark.asyncio
+async def test_non_ascii_password_returns_401(client):
+    res = await client.post(
+        "/api/v1/auth/login",
+        json={"username": "siddhartha", "password": "sidd₹1996"},
+    )
+    assert res.status_code == 401
+
+
+@pytest.mark.asyncio
+async def test_expired_jwt_and_unauth_resource_routes_return_401(client, test_settings):
+    expired = jwt.encode(
+        {
+            "sub": "usr-expired",
+            "username": "siddhartha",
+            "exp": datetime.now(UTC) - timedelta(minutes=5),
+        },
+        test_settings.jwt_secret,
+        algorithm=test_settings.jwt_algorithm,
+    )
+    assert (
+        await client.get("/api/v1/auth/me", headers={"Authorization": f"Bearer {expired}"})
+    ).status_code == 401
+    assert (await client.get("/api/v1/categories")).status_code == 401
+    assert (await client.get("/api/v1/expenses")).status_code == 401

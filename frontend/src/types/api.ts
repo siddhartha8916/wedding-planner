@@ -1,12 +1,9 @@
 import type {
-  Category,
   CeremonyTag,
   ContributorSide,
-  Expense,
   ExpenseStatus,
   PaymentMethod,
   PaymentRecord,
-  WeddingProfile,
 } from './wedding.ts';
 
 export interface ApiResponse<T> {
@@ -68,11 +65,5 @@ export interface CreateExpensePayload {
 }
 
 export type UpdateExpensePayload = Partial<Omit<CreateExpensePayload, 'advancePayment'>>;
-
-export interface MockDatabaseSnapshot {
-  profile: WeddingProfile;
-  categories: Category[];
-  expenses: Expense[];
-}
 
 export type { PaymentRecord };

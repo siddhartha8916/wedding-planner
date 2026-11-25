@@ -86,15 +86,6 @@ export function OnboardingPage() {
   const handleComplete = async (blankWorkspace: boolean) => {
     setIsSubmitting(true);
     try {
-      await saveWedding.mutateAsync({
-        brideName: brideName.trim(),
-        groomName: groomName.trim(),
-        weddingDate,
-        totalBudget,
-        contingencyPercent: useContingency ? 10 : 0,
-        isOnboarded: true,
-      });
-
       if (!blankWorkspace) {
         for (const cat of selectedCategories) {
           await createCategory.mutateAsync({
@@ -104,6 +95,15 @@ export function OnboardingPage() {
           });
         }
       }
+
+      await saveWedding.mutateAsync({
+        brideName: brideName.trim(),
+        groomName: groomName.trim(),
+        weddingDate,
+        totalBudget,
+        contingencyPercent: useContingency ? 10 : 0,
+        isOnboarded: true,
+      });
 
       showToast('Your wedding budget workspace is ready.');
       navigate('/', { replace: true });

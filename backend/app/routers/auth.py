@@ -21,7 +21,10 @@ async def login(
 ) -> TokenResponse:
     username = body.username.strip()
     user_doc = await get_user_by_username(db, username)
-    if user_doc is None or not hmac.compare_digest(user_doc["password"], body.password):
+    if user_doc is None or not hmac.compare_digest(
+        user_doc["password"].encode("utf-8"),
+        body.password.encode("utf-8"),
+    ):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid username or password",

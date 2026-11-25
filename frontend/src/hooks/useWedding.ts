@@ -21,16 +21,6 @@ export function useSaveWedding() {
   });
 }
 
-export function useSeedDemo() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: () => weddingService.seedDemo(),
-    onSuccess: () => {
-      void queryClient.invalidateQueries();
-    },
-  });
-}
-
 export function useResetWedding() {
   const queryClient = useQueryClient();
   return useMutation({

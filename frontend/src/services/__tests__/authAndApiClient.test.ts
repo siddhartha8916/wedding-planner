@@ -8,6 +8,7 @@ import {
   setAuthToken,
   setUnauthorizedHandler,
 } from '../apiClient.ts';
+import { weddingService } from '../weddingService.ts';
 
 function createMemoryStorage() {
   const map = new Map<string, string>();
@@ -92,5 +93,28 @@ describe('apiClient Bearer auth and 401 handling', () => {
       (err: Error) => err.message === 'Invalid username or password',
     );
     assert.equal(unauthorizedCalls, 0);
+  });
+
+  it('weddingService.resetAll posts to /wedding/reset with Bearer token', async () => {
+    let capturedUrl = '';
+    let capturedMethod = '';
+    let capturedAuth = '';
+    setAuthToken('jwt-reset');
+
+    globalThis.fetch = (async (input: string | URL | Request, init?: RequestInit) => {
+      capturedUrl = String(input);
+      capturedMethod = init?.method ?? 'GET';
+      capturedAuth = new Headers(init?.headers).get('Authorization') ?? '';
+      return new Response(JSON.stringify({ id: 'wed-1', isOnboarded: false }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }) as typeof fetch;
+
+    const result = await weddingService.resetAll();
+    assert.equal(capturedUrl.endsWith('/wedding/reset'), true);
+    assert.equal(capturedMethod, 'POST');
+    assert.equal(capturedAuth, 'Bearer jwt-reset');
+    assert.equal(result.isOnboarded, false);
   });
 });

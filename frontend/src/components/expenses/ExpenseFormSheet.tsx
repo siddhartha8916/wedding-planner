@@ -115,12 +115,12 @@ function ExpenseFormSheetInner({
           payload: {
             categoryId: values.categoryId,
             title: values.title,
-            description: values.description || undefined,
+            description: values.description ?? '',
             estimatedAmount: values.estimatedAmount,
-            dueDate: values.dueDate || undefined,
+            dueDate: values.dueDate ?? '',
             ceremony: values.ceremony as CeremonyTag,
-            vendorName: values.vendorName || undefined,
-            vendorPhone: values.vendorPhone || undefined,
+            vendorName: values.vendorName ?? '',
+            vendorPhone: values.vendorPhone ?? '',
           },
         });
         showToast(`Updated "${values.title}".`);

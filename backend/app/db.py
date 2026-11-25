@@ -25,19 +25,19 @@ async def ensure_indexes(db: AsyncDatabase) -> None:
 
 
 async def seed_default_user(db: AsyncDatabase, settings: Settings) -> None:
-    existing = await db["users"].find_one({"username": settings.seed_username})
-    if existing is not None:
-        return
-
     now = utc_now_iso()
-    await db["users"].insert_one(
+    await db["users"].update_one(
+        {"username": settings.seed_username},
         {
-            "_id": make_id("usr"),
-            "username": settings.seed_username,
-            "password": settings.seed_password,
-            "createdAt": now,
-            "updatedAt": now,
-        }
+            "$setOnInsert": {
+                "_id": make_id("usr"),
+                "username": settings.seed_username,
+                "password": settings.seed_password,
+                "createdAt": now,
+                "updatedAt": now,
+            }
+        },
+        upsert=True,
     )
 
 

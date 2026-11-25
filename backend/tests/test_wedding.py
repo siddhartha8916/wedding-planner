@@ -1,3 +1,5 @@
+import asyncio
+
 import pytest
 
 
@@ -127,3 +129,28 @@ async def test_reset_wedding_clears_data_preserves_user(client, auth_headers, te
     still_me = await client.get("/api/v1/auth/me", headers=auth_headers)
     assert still_me.status_code == 200
     assert still_me.json()["username"] == "siddhartha"
+
+
+@pytest.mark.asyncio
+async def test_concurrent_wedding_bootstrap_and_seed_are_atomic(
+    client,
+    auth_headers,
+    test_db,
+    test_settings,
+):
+    from app.db import seed_default_user
+
+    r1, r2 = await asyncio.gather(
+        client.get("/api/v1/wedding", headers=auth_headers),
+        client.get("/api/v1/wedding", headers=auth_headers),
+    )
+    assert r1.status_code == 200
+    assert r2.status_code == 200
+    assert r1.json()["id"] == r2.json()["id"]
+
+    await test_db["users"].delete_many({})
+    await asyncio.gather(
+        seed_default_user(test_db, test_settings),
+        seed_default_user(test_db, test_settings),
+    )
+    assert await test_db["users"].count_documents({"username": test_settings.seed_username}) == 1

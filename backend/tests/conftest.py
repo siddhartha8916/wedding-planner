@@ -40,3 +40,15 @@ async def test_db(client: httpx.AsyncClient) -> AsyncDatabase:
     transport = client._transport
     assert isinstance(transport, httpx.ASGITransport)
     return transport.app.state.db
+
+
+@pytest_asyncio.fixture
+async def auth_headers(client: httpx.AsyncClient) -> dict[str, str]:
+    res = await client.post(
+        "/api/v1/auth/login",
+        json={"username": "siddhartha", "password": "sidd@1996"},
+    )
+    assert res.status_code == 200
+    token = res.json()["accessToken"]
+    return {"Authorization": f"Bearer {token}"}
+

@@ -11,6 +11,7 @@ import { useResetWedding, useSaveWedding } from '../hooks/useWedding.ts';
 // import { useSeedDemo } from '../hooks/useWedding.ts';
 import { formatINR } from '../utils/currency.ts';
 import { downloadCSVFile, generateExpensesCSV } from '../utils/export.ts';
+import { matchesResetPhrase, pickRandomResetPhrase } from '../utils/resetPhrase.ts';
 import { PageHeader } from '../components/layout/PageHeader.tsx';
 import { Button } from '../components/ui/Button.tsx';
 import { Card } from '../components/ui/Card.tsx';
@@ -39,6 +40,21 @@ export function SettingsPage() {
   const { showToast } = useToast();
 
   const [resetModalOpen, setResetModalOpen] = useState(false);
+  const [resetChallengePhrase, setResetChallengePhrase] = useState('');
+  const [resetConfirmInput, setResetConfirmInput] = useState('');
+
+  const canConfirmReset = matchesResetPhrase(resetConfirmInput, resetChallengePhrase);
+
+  const openResetModal = () => {
+    setResetChallengePhrase((prev) => pickRandomResetPhrase(prev));
+    setResetConfirmInput('');
+    setResetModalOpen(true);
+  };
+
+  const closeResetModal = () => {
+    setResetModalOpen(false);
+    setResetConfirmInput('');
+  };
 
   const {
     register,
@@ -119,9 +135,10 @@ export function SettingsPage() {
   */
 
   const handleConfirmReset = async () => {
+    if (!canConfirmReset) return;
     try {
       await resetWedding.mutateAsync();
-      setResetModalOpen(false);
+      closeResetModal();
       showToast('Wedding workspace reset.');
     } catch {
       showToast('Could not reset workspace.', 'terracotta');
@@ -251,7 +268,7 @@ export function SettingsPage() {
             <Button
               variant="danger"
               icon={<RotateCcw className="w-4 h-4" strokeWidth={1.5} />}
-              onClick={() => setResetModalOpen(true)}
+              onClick={openResetModal}
             >
               Reset Data
             </Button>
@@ -318,16 +335,17 @@ export function SettingsPage() {
 
       <Modal
         open={resetModalOpen}
-        onClose={() => setResetModalOpen(false)}
+        onClose={closeResetModal}
         title="Reset Wedding Data"
         subtitle="Start fresh from Onboarding"
         footer={
           <>
-            <Button variant="secondary" onClick={() => setResetModalOpen(false)}>
+            <Button variant="secondary" onClick={closeResetModal}>
               Cancel
             </Button>
             <Button
               variant="danger"
+              disabled={!canConfirmReset}
               loading={resetWedding.isPending}
               onClick={handleConfirmReset}
             >
@@ -336,10 +354,29 @@ export function SettingsPage() {
           </>
         }
       >
-        <p className="text-sm text-botanical-text-tertiary">
-          This clears all saved categories, expenses, and payments for this wedding and returns you
-          to the Onboarding screen so a new wedding can be planned.
-        </p>
+        <div className="space-y-4">
+          <p className="text-sm text-botanical-text-tertiary">
+            This clears all saved categories, expenses, and payments for this wedding and returns
+            you to the Onboarding screen so a new wedding can be planned.
+          </p>
+
+          <div className="rounded-lg border border-botanical-beige bg-botanical-ivory/70 px-3.5 py-2.5">
+            <p className="text-xs text-botanical-muted">Confirmation phrase</p>
+            <p className="mt-0.5 font-mono text-sm font-semibold text-botanical-text">
+              {resetChallengePhrase}
+            </p>
+          </div>
+
+          <Input
+            label="Type the phrase above to confirm"
+            value={resetConfirmInput}
+            onChange={(e) => setResetConfirmInput(e.target.value)}
+            placeholder="Type the phrase shown above"
+            autoComplete="off"
+            autoCapitalize="none"
+            spellCheck={false}
+          />
+        </div>
       </Modal>
     </div>
   );

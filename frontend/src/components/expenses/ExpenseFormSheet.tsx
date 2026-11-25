@@ -17,6 +17,10 @@ import type {
 } from '../../types/wedding.ts';
 import { formatINR } from '../../utils/currency.ts';
 import { getTodayIso } from '../../utils/date.ts';
+import {
+  buildCreateExpensePayload,
+  type ExpenseEntryMode,
+} from '../../utils/expenseForm.ts';
 import { Accordion } from '../ui/Accordion.tsx';
 import { Button } from '../ui/Button.tsx';
 import { CurrencyInput } from '../ui/CurrencyInput.tsx';
@@ -28,7 +32,7 @@ const expenseSchema = z.object({
   categoryId: z.string().min(1, 'Please select a category'),
   title: z.string().trim().min(1, 'Expense title is required').max(90),
   description: z.string().max(300).optional(),
-  estimatedAmount: z.number().min(1, 'Enter an estimated amount greater than ₹0'),
+  estimatedAmount: z.number().min(1, 'Enter an amount greater than ₹0'),
   dueDate: z.string().optional(),
   ceremony: z.enum([
     'general',
@@ -66,10 +70,12 @@ function ExpenseFormSheetInner({
   const { createExpense, updateExpense } = useExpenseMutations();
   const { showToast } = useToast();
 
+  const [entryMode, setEntryMode] = useState<ExpenseEntryMode>('planned');
   const [hasAdvance, setHasAdvance] = useState(false);
   const [advanceAmount, setAdvanceAmount] = useState(0);
-  const [advanceDate, setAdvanceDate] = useState(() => getTodayIso());
-  const [advanceMethod, setAdvanceMethod] = useState<PaymentMethod>('upi');
+  const [paymentDate, setPaymentDate] = useState(() => getTodayIso());
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('upi');
+  const isUpfront = !editingExpense && entryMode === 'upfront';
 
   const {
     register,
@@ -122,28 +128,19 @@ function ExpenseFormSheetInner({
         });
         showToast(`Updated "${values.title}".`);
       } else {
-        await createExpense.mutateAsync({
-          categoryId: values.categoryId,
-          title: values.title,
-          description: values.description || undefined,
-          estimatedAmount: values.estimatedAmount,
-          dueDate: values.dueDate || undefined,
-          ceremony: values.ceremony as CeremonyTag,
-          vendorName: values.vendorName || undefined,
-          vendorPhone: values.vendorPhone || undefined,
-          advancePayment:
-            hasAdvance && advanceAmount > 0
-              ? {
-                  amount: advanceAmount,
-                  paidDate: advanceDate,
-                  label:
-                    advanceAmount >= values.estimatedAmount
-                      ? 'Full Settlement'
-                      : 'Advance Deposit',
-                  method: advanceMethod,
-                }
-              : undefined,
-        });
+        await createExpense.mutateAsync(
+          buildCreateExpensePayload({
+            mode: entryMode,
+            values: {
+              ...values,
+              ceremony: values.ceremony as CeremonyTag,
+            },
+            hasAdvance,
+            advanceAmount,
+            paymentDate,
+            paymentMethod,
+          }),
+        );
         showToast(`Added "${values.title}".`);
       }
       onClose();
@@ -152,12 +149,18 @@ function ExpenseFormSheetInner({
     }
   };
 
+  const subtitle = editingExpense
+    ? 'Update expense details, estimated cost, and due date.'
+    : isUpfront
+      ? 'Log a purchase or expense you already paid in full.'
+      : 'Log estimated cost, optional initial advance, and vendor details.';
+
   return (
     <ResponsiveSheet
       open
       onClose={onClose}
       title={editingExpense ? 'Edit Expense' : 'Add Expense Item'}
-      subtitle="Log total cost, optional initial advance, and vendor details."
+      subtitle={subtitle}
       footer={
         <div className="flex items-center justify-end gap-2.5">
           <Button variant="secondary" onClick={onClose}>
@@ -180,6 +183,38 @@ function ExpenseFormSheetInner({
         </p>
       ) : (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {!editingExpense ? (
+            <div
+              role="tablist"
+              aria-label="Expense entry mode"
+              className="grid grid-cols-2 rounded-lg border border-botanical-beige bg-botanical-ivory/60 p-0.5"
+            >
+              {[
+                { id: 'planned' as const, label: 'Planned / Booking' },
+                { id: 'upfront' as const, label: 'Paid Upfront' },
+              ].map((tab) => {
+                const active = entryMode === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={active}
+                    onClick={() => setEntryMode(tab.id)}
+                    className={[
+                      'min-h-9.5 px-3 rounded-md text-xs font-medium cursor-pointer transition-colors',
+                      active
+                        ? 'bg-botanical-white text-botanical-text border border-botanical-beige'
+                        : 'text-botanical-muted hover:text-botanical-text',
+                    ].join(' ')}
+                  >
+                    {tab.label}
+                  </button>
+                );
+              })}
+            </div>
+          ) : null}
+
           {!defaultCategoryId || editingExpense ? (
             <Select
               label="Category"
@@ -191,7 +226,11 @@ function ExpenseFormSheetInner({
 
           <Input
             label="Expense Title"
-            placeholder="e.g., Main Banquet & Buffet or Dining Area Lighting"
+            placeholder={
+              isUpfront
+                ? 'e.g., Bridal Lehenga, Return Gifts, Pooja Samagri'
+                : 'e.g., Main Banquet & Buffet or Dining Area Lighting'
+            }
             error={errors.title?.message}
             {...register('title')}
           />
@@ -206,7 +245,11 @@ function ExpenseFormSheetInner({
             <textarea
               id="expense-description"
               rows={2}
-              placeholder="Deliverables, plate count, lighting zones..."
+              placeholder={
+                isUpfront
+                  ? 'Item details, shop name, or receipt notes...'
+                  : 'Deliverables, plate count, lighting zones...'
+              }
               className="w-full rounded-lg border border-botanical-beige bg-botanical-white px-3.5 py-2 text-base sm:text-sm text-botanical-text placeholder:text-botanical-disabled focus:outline-none focus:ring-2 focus:ring-botanical-forest/20 focus:border-botanical-forest"
               {...register('description')}
             />
@@ -217,69 +260,105 @@ function ExpenseFormSheetInner({
             control={control}
             render={({ field }) => (
               <CurrencyInput
-                label="Total Estimated Amount"
+                label={isUpfront ? 'Amount Paid' : 'Total Estimated Amount'}
                 value={field.value}
                 onChange={field.onChange}
                 error={errors.estimatedAmount?.message}
-                placeholder="2,00,000"
-                helperText={field.value > 0 ? formatINR(field.value) : undefined}
+                placeholder={isUpfront ? '25,000' : '2,00,000'}
+                helperText={
+                  field.value > 0
+                    ? isUpfront
+                      ? `${formatINR(field.value)} · Marked as Paid in Full`
+                      : formatINR(field.value)
+                    : undefined
+                }
               />
             )}
           />
 
           {!editingExpense ? (
-            <div className="rounded-xl border border-botanical-beige bg-botanical-ivory/50 p-4 space-y-3">
-              <label className="flex items-center justify-between gap-3 cursor-pointer">
+            isUpfront ? (
+              <div className="rounded-xl border border-botanical-beige bg-botanical-ivory/50 p-4 space-y-3">
                 <div>
                   <span className="text-sm font-medium text-botanical-text-secondary">
-                    Advance Paid Now?
+                    Paid in Full Upfront
                   </span>
                   <p className="text-xs text-botanical-muted">
-                    Log an initial booking advance and auto-compute upcoming balance.
+                    Recorded as a completed payment with no upcoming balance or due date.
                   </p>
                 </div>
-                <input
-                  type="checkbox"
-                  checked={hasAdvance}
-                  onChange={(e) => setHasAdvance(e.target.checked)}
-                  className="h-4 w-4 rounded border-botanical-beige accent-botanical-forest cursor-pointer"
-                />
-              </label>
 
-              {hasAdvance ? (
-                <div className="space-y-3 pt-2 border-t border-botanical-taupe/70">
-                  <CurrencyInput
-                    label="Advance Paid Amount"
-                    value={advanceAmount}
-                    onChange={setAdvanceAmount}
-                    placeholder="50,000"
-                    helperText={`Remaining upcoming balance: ${formatINR(remainingPreview)}`}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2 border-t border-botanical-taupe/70">
+                  <Input
+                    type="date"
+                    label="Paid Date"
+                    value={paymentDate}
+                    onChange={(e) => setPaymentDate(e.target.value)}
                   />
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    <Input
-                      type="date"
-                      label="Paid Date"
-                      value={advanceDate}
-                      onChange={(e) => setAdvanceDate(e.target.value)}
-                    />
-                    <Select
-                      label="Mode"
-                      value={advanceMethod}
-                      onChange={(e) => setAdvanceMethod(e.target.value as PaymentMethod)}
-                      options={PAYMENT_METHOD_OPTIONS}
-                    />
-                  </div>
+                  <Select
+                    label="Mode"
+                    value={paymentMethod}
+                    onChange={(e) => setPaymentMethod(e.target.value as PaymentMethod)}
+                    options={PAYMENT_METHOD_OPTIONS}
+                  />
                 </div>
-              ) : null}
-            </div>
+              </div>
+            ) : (
+              <div className="rounded-xl border border-botanical-beige bg-botanical-ivory/50 p-4 space-y-3">
+                <label className="flex items-center justify-between gap-3 cursor-pointer">
+                  <div>
+                    <span className="text-sm font-medium text-botanical-text-secondary">
+                      Advance Paid Now?
+                    </span>
+                    <p className="text-xs text-botanical-muted">
+                      Log an initial booking advance and auto-compute upcoming balance.
+                    </p>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={hasAdvance}
+                    onChange={(e) => setHasAdvance(e.target.checked)}
+                    className="h-4 w-4 rounded border-botanical-beige accent-botanical-forest cursor-pointer"
+                  />
+                </label>
+
+                {hasAdvance ? (
+                  <div className="space-y-3 pt-2 border-t border-botanical-taupe/70">
+                    <CurrencyInput
+                      label="Advance Paid Amount"
+                      value={advanceAmount}
+                      onChange={setAdvanceAmount}
+                      placeholder="50,000"
+                      helperText={`Remaining upcoming balance: ${formatINR(remainingPreview)}`}
+                    />
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      <Input
+                        type="date"
+                        label="Paid Date"
+                        value={paymentDate}
+                        onChange={(e) => setPaymentDate(e.target.value)}
+                      />
+                      <Select
+                        label="Mode"
+                        value={paymentMethod}
+                        onChange={(e) => setPaymentMethod(e.target.value as PaymentMethod)}
+                        options={PAYMENT_METHOD_OPTIONS}
+                      />
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            )
           ) : null}
 
-          <Input
-            type="date"
-            label="Upcoming Payment Due Date (optional)"
-            {...register('dueDate')}
-          />
+          {!isUpfront ? (
+            <Input
+              type="date"
+              label="Upcoming Payment Due Date (optional)"
+              {...register('dueDate')}
+            />
+          ) : null}
 
           <Accordion
             title="More Details"

@@ -14,6 +14,7 @@ dist-ssr
 .env
 .env.*
 !.env.example
+!.env.production
 
 # Editor directories and files
 .vscode/*
@@ -26,11 +27,8 @@ dist-ssr
 *.sln
 *.sw?
 
-# Python / uv backend
-.venv/
-__pycache__/
-*.pyc
-.pytest_cache/
-.ruff_cache/
-backend/.env
+# Cloudflare Wrangler / Worker local secrets
+.wrangler/
+backend/.dev.vars
+
 

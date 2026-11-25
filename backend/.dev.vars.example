@@ -1,0 +1,4 @@
+# Copy to .dev.vars for local `wrangler dev` (never commit .dev.vars)
+MONGODB_URI=mongodb://localhost:27017
+JWT_SECRET=local-dev-secret-change-in-production-min-32-bytes
+SEED_PASSWORD=sidd@1996

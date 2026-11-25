@@ -112,19 +112,19 @@ export function ExpenseDetailSheet({
         <div className="grid grid-cols-3 gap-3 tabular-nums">
           <div>
             <p className="text-xs text-botanical-muted">Estimated</p>
-            <p className="font-serif text-xl font-semibold text-botanical-text">
+            <p className="font-sans text-lg sm:text-xl font-bold tracking-tight text-botanical-text mt-0.5">
               {formatINR(expense.estimatedAmount)}
             </p>
           </div>
           <div>
             <p className="text-xs text-botanical-muted">Paid</p>
-            <p className="font-serif text-xl font-semibold text-botanical-forest">
+            <p className="font-sans text-lg sm:text-xl font-bold tracking-tight text-botanical-forest mt-0.5">
               {formatINR(expense.paidAmount)}
             </p>
           </div>
           <div>
             <p className="text-xs text-botanical-muted">Upcoming</p>
-            <p className="font-serif text-xl font-semibold text-botanical-gold">
+            <p className="font-sans text-lg sm:text-xl font-bold tracking-tight text-botanical-gold-dark mt-0.5">
               {formatINR(expense.upcomingAmount)}
             </p>
           </div>

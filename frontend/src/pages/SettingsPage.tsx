@@ -289,13 +289,13 @@ export function SettingsPage() {
           <h2 className="font-serif text-xl font-semibold text-botanical-text">
             {profile.brideName} &amp; {profile.groomName} — Ledger Summary
           </h2>
-          <span className="text-xs text-botanical-muted tabular-nums">
+          <span className="text-sm font-semibold text-botanical-text tabular-nums">
             Total Budget: {formatINR(summary.totalBudget)}
           </span>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs tabular-nums">
+          <table className="w-full text-left text-sm tabular-nums">
             <thead>
               <tr className="border-b border-botanical-taupe text-botanical-muted">
                 <th className="py-2 pr-3 font-medium">Category</th>

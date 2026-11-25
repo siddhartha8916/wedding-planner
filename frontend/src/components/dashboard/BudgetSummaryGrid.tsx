@@ -40,19 +40,19 @@ export function BudgetSummaryGrid({
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 xl:gap-5">
         <Card padding="md" className="flex flex-col justify-between gap-2">
           <div className="flex items-center justify-between gap-2">
-            <span className="text-xs font-medium uppercase tracking-wider text-botanical-muted">
+            <span className="text-[11px] sm:text-xs font-medium uppercase tracking-wider text-botanical-muted truncate">
               Total Budget
             </span>
             <button
               type="button"
               onClick={openEditor}
               aria-label="Edit total budget"
-              className="p-1.5 -m-1.5 rounded-md text-botanical-muted hover:text-botanical-text hover:bg-botanical-surface/70 cursor-pointer"
+              className="p-1.5 -m-1.5 rounded-md text-botanical-muted hover:text-botanical-text hover:bg-botanical-surface/70 cursor-pointer shrink-0"
             >
               <Pencil className="w-3.5 h-3.5" strokeWidth={1.5} />
             </button>
           </div>
-          <p className="font-serif text-xl sm:text-2xl font-semibold text-botanical-text tabular-nums truncate">
+          <p className="font-sans text-xl sm:text-[26px] font-bold tracking-tight text-botanical-text tabular-nums leading-tight truncate">
             {formatINR(summary.totalBudget)}
           </p>
           <p className="text-xs text-botanical-muted tabular-nums">
@@ -63,12 +63,12 @@ export function BudgetSummaryGrid({
         </Card>
 
         <Card padding="md" className="flex flex-col justify-between gap-2">
-          <span className="text-xs font-medium uppercase tracking-wider text-botanical-muted">
+          <span className="text-[11px] sm:text-xs font-medium uppercase tracking-wider text-botanical-muted truncate">
             Budget Left
           </span>
           <p
             className={[
-              'font-serif text-xl sm:text-2xl font-semibold tabular-nums truncate',
+              'font-sans text-xl sm:text-[26px] font-bold tracking-tight tabular-nums leading-tight truncate',
               isOverBudget ? 'text-botanical-terracotta' : 'text-botanical-text',
             ].join(' ')}
           >
@@ -87,10 +87,10 @@ export function BudgetSummaryGrid({
         </Card>
 
         <Card padding="md" className="flex flex-col justify-between gap-2">
-          <span className="text-xs font-medium uppercase tracking-wider text-botanical-muted">
+          <span className="text-[11px] sm:text-xs font-medium uppercase tracking-wider text-botanical-muted truncate">
             Paid So Far
           </span>
-          <p className="font-serif text-xl sm:text-2xl font-semibold text-botanical-forest tabular-nums truncate">
+          <p className="font-sans text-xl sm:text-[26px] font-bold tracking-tight text-botanical-forest tabular-nums leading-tight truncate">
             {formatINR(summary.totalPaid)}
           </p>
           <p className="text-xs text-botanical-sage-dark tabular-nums">
@@ -105,12 +105,12 @@ export function BudgetSummaryGrid({
           className="flex flex-col justify-between gap-2"
         >
           <div className="flex items-center justify-between gap-2">
-            <span className="text-xs font-medium uppercase tracking-wider text-botanical-muted">
+            <span className="text-[11px] sm:text-xs font-medium uppercase tracking-wider text-botanical-muted truncate">
               Upcoming Dues
             </span>
-            <ArrowUpRight className="w-4 h-4 text-botanical-muted" strokeWidth={1.5} />
+            <ArrowUpRight className="w-4 h-4 text-botanical-muted shrink-0" strokeWidth={1.5} />
           </div>
-          <p className="font-serif text-xl sm:text-2xl font-semibold text-botanical-gold tabular-nums truncate">
+          <p className="font-sans text-xl sm:text-[26px] font-bold tracking-tight text-botanical-gold-dark tabular-nums leading-tight truncate">
             {formatINR(summary.totalUpcoming)}
           </p>
           <p className="text-xs text-botanical-muted tabular-nums">

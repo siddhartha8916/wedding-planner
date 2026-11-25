@@ -52,23 +52,30 @@ export function ExpenseRow({ expense, onSelect, onRecordPayment }: ExpenseRowPro
 
         <div
           onClick={() => onSelect(expense)}
-          className="grid grid-cols-3 gap-2 rounded-lg bg-botanical-ivory/60 border border-botanical-taupe/60 p-2.5 cursor-pointer tabular-nums"
+          className="grid grid-cols-3 gap-2 rounded-lg bg-botanical-ivory/60 border border-botanical-taupe/60 p-3 cursor-pointer tabular-nums"
         >
           <div>
             <p className="text-[11px] text-botanical-muted">Total</p>
-            <p className="text-xs font-semibold text-botanical-text">
+            <p className="text-sm font-bold text-botanical-text mt-0.5">
               {formatINR(expense.estimatedAmount)}
             </p>
           </div>
           <div>
             <p className="text-[11px] text-botanical-muted">Paid</p>
-            <p className="text-xs font-semibold text-botanical-forest">
+            <p className="text-sm font-bold text-botanical-forest mt-0.5">
               {formatINR(expense.paidAmount)}
             </p>
           </div>
           <div>
             <p className="text-[11px] text-botanical-muted">Upcoming</p>
-            <p className="text-xs font-semibold text-botanical-text-secondary">
+            <p
+              className={[
+                'text-sm font-bold mt-0.5',
+                expense.upcomingAmount > 0
+                  ? 'text-botanical-gold-dark'
+                  : 'text-botanical-text-secondary',
+              ].join(' ')}
+            >
               {formatINR(expense.upcomingAmount)}
             </p>
           </div>
@@ -98,28 +105,29 @@ export function ExpenseRow({ expense, onSelect, onRecordPayment }: ExpenseRowPro
       </div>
 
       {/* Tablet & Desktop horizontal ledger row (>= 768px) */}
-      <div className="hidden md:grid md:grid-cols-[minmax(0,2.2fr)_minmax(84px,auto)_minmax(84px,auto)_minmax(96px,auto)_auto] md:items-center md:gap-4 lg:gap-6 px-4 py-3.5">
+      <div className="hidden md:grid md:grid-cols-[minmax(0,1fr)_120px_120px_128px_184px] md:items-center md:gap-4 px-4 py-3.5">
         <div
           onClick={() => onSelect(expense)}
           className="min-w-0 cursor-pointer space-y-1"
         >
           <div className="flex items-center gap-2 min-w-0">
-            <span className="text-sm font-medium text-botanical-text truncate hover:text-botanical-forest">
+            <span className="text-sm font-semibold text-botanical-text truncate hover:text-botanical-forest">
               {expense.title}
             </span>
             {ceremonyLabel ? <Badge tone="neutral">{ceremonyLabel}</Badge> : null}
           </div>
-          <p className="text-xs text-botanical-muted truncate">
-            {[expense.vendorName, expense.description].filter(Boolean).join(' · ') ||
-              formatDisplayDate(expense.dueDate)}
-          </p>
+          {expense.vendorName || expense.description ? (
+            <p className="text-xs text-botanical-muted truncate">
+              {[expense.vendorName, expense.description].filter(Boolean).join(' · ')}
+            </p>
+          ) : null}
         </div>
 
         <div
           onClick={() => onSelect(expense)}
           className="text-right cursor-pointer tabular-nums whitespace-nowrap"
         >
-          <p className="text-sm font-medium text-botanical-text">
+          <p className="text-[15px] font-bold text-botanical-text">
             {formatINR(expense.estimatedAmount)}
           </p>
           <p className="text-[11px] text-botanical-muted">Total</p>
@@ -129,7 +137,7 @@ export function ExpenseRow({ expense, onSelect, onRecordPayment }: ExpenseRowPro
           onClick={() => onSelect(expense)}
           className="text-right cursor-pointer tabular-nums whitespace-nowrap"
         >
-          <p className="text-sm font-medium text-botanical-forest">
+          <p className="text-[15px] font-bold text-botanical-forest">
             {formatINR(expense.paidAmount)}
           </p>
           <p className="text-[11px] text-botanical-muted">
@@ -142,7 +150,14 @@ export function ExpenseRow({ expense, onSelect, onRecordPayment }: ExpenseRowPro
           onClick={() => onSelect(expense)}
           className="text-right cursor-pointer tabular-nums whitespace-nowrap"
         >
-          <p className="text-sm font-semibold text-botanical-text-secondary">
+          <p
+            className={[
+              'text-[15px] font-bold',
+              expense.upcomingAmount > 0
+                ? 'text-botanical-gold-dark'
+                : 'text-botanical-text-secondary',
+            ].join(' ')}
+          >
             {formatINR(expense.upcomingAmount)}
           </p>
           <p className="text-[11px] text-botanical-muted">
@@ -150,7 +165,7 @@ export function ExpenseRow({ expense, onSelect, onRecordPayment }: ExpenseRowPro
           </p>
         </div>
 
-        <div className="flex flex-col items-end gap-1.5 lg:flex-row lg:items-center lg:gap-2.5 shrink-0">
+        <div className="flex items-center justify-end gap-2 shrink-0">
           <Badge tone={statusInfo.tone}>{statusInfo.label}</Badge>
           {expense.upcomingAmount > 0 ? (
             <Button

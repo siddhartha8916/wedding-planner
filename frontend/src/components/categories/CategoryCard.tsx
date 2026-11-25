@@ -21,7 +21,7 @@ export function CategoryCard({ metrics, onEdit, onDelete }: CategoryCardProps) {
 
   return (
     <Card padding="md" className="flex flex-col justify-between gap-4 hover:border-botanical-gold/70 transition-colors">
-      <div className="space-y-3">
+      <div className="flex-1 flex flex-col gap-3">
         <div className="flex items-start justify-between gap-3">
           <Link
             to={`/categories/${category.id}`}
@@ -31,10 +31,10 @@ export function CategoryCard({ metrics, onEdit, onDelete }: CategoryCardProps) {
               <CategoryIcon name={category.icon} className="w-5 h-5" />
             </div>
             <div className="min-w-0">
-              <h3 className="font-serif text-xl font-semibold text-botanical-text group-hover:text-botanical-forest truncate">
+              <h3 className="font-serif text-lg font-semibold text-botanical-text group-hover:text-botanical-forest line-clamp-2 leading-snug">
                 {category.name}
               </h3>
-              <p className="text-xs text-botanical-muted tabular-nums">
+              <p className="text-xs text-botanical-muted tabular-nums mt-0.5">
                 {expenseCount} {expenseCount === 1 ? 'expense item' : 'expense items'}
               </p>
             </div>
@@ -60,17 +60,17 @@ export function CategoryCard({ metrics, onEdit, onDelete }: CategoryCardProps) {
           </div>
         </div>
 
-        {category.description ? (
-          <p className="text-xs text-botanical-text-tertiary line-clamp-2">{category.description}</p>
-        ) : null}
+        <p className="text-xs text-botanical-text-tertiary line-clamp-2 min-h-8">
+          {category.description || 'No description added yet.'}
+        </p>
 
-        <div className="space-y-1.5">
+        <div className="mt-auto space-y-2 pt-1">
           <div className="flex items-baseline justify-between gap-2">
-            <span className="font-serif text-2xl font-semibold text-botanical-text tabular-nums">
+            <span className="font-sans text-2xl font-bold tracking-tight text-botanical-text tabular-nums">
               {formatINR(totalEstimated)}
             </span>
             {hasCap ? (
-              <Badge tone={isOverCap ? 'terracotta' : 'neutral'} className="tabular-nums">
+              <Badge tone={isOverCap ? 'terracotta' : 'neutral'} className="tabular-nums shrink-0">
                 {isOverCap
                   ? `Over cap by ${formatINR(Math.abs(metrics.variance ?? 0))}`
                   : `Cap ${formatINR(category.allocatedBudget ?? 0)}`}
@@ -89,14 +89,19 @@ export function CategoryCard({ metrics, onEdit, onDelete }: CategoryCardProps) {
         </div>
       </div>
 
-      <div className="pt-3 border-t border-botanical-taupe/70 flex items-center justify-between text-xs tabular-nums">
+      <div className="pt-3 border-t border-botanical-taupe/70 flex items-center justify-between text-xs sm:text-[13px] tabular-nums">
         <div>
           <span className="text-botanical-muted">Paid: </span>
-          <span className="font-medium text-botanical-forest">{formatINR(totalPaid)}</span>
+          <span className="font-semibold text-botanical-forest">{formatINR(totalPaid)}</span>
         </div>
         <div>
           <span className="text-botanical-muted">Upcoming: </span>
-          <span className="font-medium text-botanical-text-secondary">
+          <span
+            className={[
+              'font-semibold',
+              totalUpcoming > 0 ? 'text-botanical-gold-dark' : 'text-botanical-text-secondary',
+            ].join(' ')}
+          >
             {formatINR(totalUpcoming)}
           </span>
         </div>

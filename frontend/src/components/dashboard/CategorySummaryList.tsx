@@ -41,7 +41,7 @@ export function CategorySummaryList({ items }: CategorySummaryListProps) {
                 <span className="text-sm font-medium text-botanical-text-secondary truncate">
                   {item.category.name}
                 </span>
-                <span className="text-sm font-semibold text-botanical-text tabular-nums shrink-0">
+                <span className="text-base font-bold text-botanical-text tabular-nums shrink-0">
                   {formatINR(item.totalEstimated)}
                 </span>
               </div>
@@ -59,13 +59,26 @@ export function CategorySummaryList({ items }: CategorySummaryListProps) {
                 ]}
               />
 
-              <div className="flex items-center justify-between text-xs text-botanical-muted tabular-nums">
+              <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-0.5 text-xs sm:text-[13px] text-botanical-muted tabular-nums">
                 <span>
                   {item.expenseCount} {item.expenseCount === 1 ? 'item' : 'items'} · Paid{' '}
-                  {formatINR(item.totalPaid)}
+                  <span className="font-semibold text-botanical-forest">
+                    {formatINR(item.totalPaid)}
+                  </span>
                 </span>
-                <span>
-                  {item.totalUpcoming > 0 ? `Due ${formatINR(item.totalUpcoming)}` : 'Settled'}
+                <span className="flex items-center gap-2">
+                  {item.category.allocatedBudget ? (
+                    <span className="text-xs text-botanical-muted">
+                      Cap {formatINR(item.category.allocatedBudget)} ·
+                    </span>
+                  ) : null}
+                  {item.totalUpcoming > 0 ? (
+                    <span className="font-semibold text-botanical-gold-dark">
+                      Due {formatINR(item.totalUpcoming)}
+                    </span>
+                  ) : (
+                    <span className="font-medium text-botanical-sage-dark">Settled</span>
+                  )}
                 </span>
               </div>
             </div>

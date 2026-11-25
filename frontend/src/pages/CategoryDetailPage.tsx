@@ -19,6 +19,7 @@ import { Button } from '../components/ui/Button.tsx';
 import { Card } from '../components/ui/Card.tsx';
 import { EmptyState } from '../components/ui/EmptyState.tsx';
 import { Modal } from '../components/ui/Modal.tsx';
+import { ProgressBar } from '../components/ui/ProgressBar.tsx';
 import { Skeleton } from '../components/ui/Skeleton.tsx';
 
 export function CategoryDetailPage() {
@@ -160,30 +161,68 @@ export function CategoryDetailPage() {
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         <Card padding="sm" surface="ivory">
-          <p className="text-xs text-botanical-muted">Category Cap</p>
-          <p className="font-serif text-xl font-semibold text-botanical-text tabular-nums mt-1">
+          <p className="text-[11px] sm:text-xs font-medium uppercase tracking-wider text-botanical-muted">
+            Category Cap
+          </p>
+          <p className="font-sans text-xl sm:text-2xl font-bold tracking-tight text-botanical-text tabular-nums mt-1.5">
             {category.allocatedBudget ? formatINR(category.allocatedBudget) : 'No cap'}
           </p>
         </Card>
         <Card padding="sm">
-          <p className="text-xs text-botanical-muted">Total Committed</p>
-          <p className="font-serif text-xl font-semibold text-botanical-text tabular-nums mt-1">
+          <p className="text-[11px] sm:text-xs font-medium uppercase tracking-wider text-botanical-muted">
+            Total Committed
+          </p>
+          <p className="font-sans text-xl sm:text-2xl font-bold tracking-tight text-botanical-text tabular-nums mt-1.5">
             {formatINR(metrics.totalEstimated)}
           </p>
         </Card>
         <Card padding="sm">
-          <p className="text-xs text-botanical-muted">Paid / Advances</p>
-          <p className="font-serif text-xl font-semibold text-botanical-forest tabular-nums mt-1">
+          <p className="text-[11px] sm:text-xs font-medium uppercase tracking-wider text-botanical-muted">
+            Paid / Advances
+          </p>
+          <p className="font-sans text-xl sm:text-2xl font-bold tracking-tight text-botanical-forest tabular-nums mt-1.5">
             {formatINR(metrics.totalPaid)}
           </p>
         </Card>
         <Card padding="sm">
-          <p className="text-xs text-botanical-muted">Upcoming Balance</p>
-          <p className="font-serif text-xl font-semibold text-botanical-gold tabular-nums mt-1">
+          <p className="text-[11px] sm:text-xs font-medium uppercase tracking-wider text-botanical-muted">
+            Upcoming Balance
+          </p>
+          <p className="font-sans text-xl sm:text-2xl font-bold tracking-tight text-botanical-gold-dark tabular-nums mt-1.5">
             {formatINR(metrics.totalUpcoming)}
           </p>
         </Card>
       </div>
+
+      {metrics.totalEstimated > 0 || category.allocatedBudget ? (
+        <Card padding="sm" className="space-y-2">
+          <div className="flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm tabular-nums">
+            <span className="font-medium text-botanical-text-secondary">
+              Category Spend Progress
+            </span>
+            <span className="text-botanical-text-tertiary">
+              <span className="font-semibold text-botanical-forest">
+                {metrics.paidPercentOfEstimated}% paid
+              </span>
+              {category.allocatedBudget
+                ? ` · ${formatINR(category.allocatedBudget)} cap`
+                : null}
+            </span>
+          </div>
+          <ProgressBar
+            max={Math.max(category.allocatedBudget ?? 0, metrics.totalEstimated, 1)}
+            heightClass="h-2.5"
+            segments={[
+              { value: metrics.totalPaid, colorClass: 'bg-botanical-forest', label: 'Paid' },
+              {
+                value: metrics.totalUpcoming,
+                colorClass: 'bg-botanical-gold-light',
+                label: 'Upcoming',
+              },
+            ]}
+          />
+        </Card>
+      ) : null}
 
       <ExpenseFilterBar
         search={search}

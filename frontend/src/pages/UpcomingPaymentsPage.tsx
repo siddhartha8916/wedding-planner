@@ -107,22 +107,28 @@ export function UpcomingPaymentsPage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
         <Card padding="sm">
-          <p className="text-xs text-botanical-muted">Pending Balance</p>
-          <p className="font-serif text-2xl font-semibold text-botanical-gold tabular-nums mt-1">
+          <p className="text-[11px] sm:text-xs font-medium uppercase tracking-wider text-botanical-muted">
+            Pending Balance
+          </p>
+          <p className="font-sans text-2xl sm:text-[26px] font-bold tracking-tight text-botanical-gold-dark tabular-nums mt-1.5">
             {formatINR(totalFilteredBalance)}
           </p>
         </Card>
         <Card padding="sm">
-          <p className="text-xs text-botanical-muted">Pending Items</p>
-          <p className="font-serif text-2xl font-semibold text-botanical-text tabular-nums mt-1">
+          <p className="text-[11px] sm:text-xs font-medium uppercase tracking-wider text-botanical-muted">
+            Pending Items
+          </p>
+          <p className="font-sans text-2xl sm:text-[26px] font-bold tracking-tight text-botanical-text tabular-nums mt-1.5">
             {filteredUpcoming.length}
           </p>
         </Card>
         <Card padding="sm" surface="ivory">
-          <p className="text-xs text-botanical-muted">Overdue Items</p>
+          <p className="text-[11px] sm:text-xs font-medium uppercase tracking-wider text-botanical-muted">
+            Overdue Items
+          </p>
           <p
             className={[
-              'font-serif text-2xl font-semibold tabular-nums mt-1',
+              'font-sans text-2xl sm:text-[26px] font-bold tracking-tight tabular-nums mt-1.5',
               overdueCount > 0 ? 'text-botanical-terracotta' : 'text-botanical-sage-dark',
             ].join(' ')}
           >
@@ -231,10 +237,10 @@ export function UpcomingPaymentsPage() {
                         </p>
                       </div>
 
-                      <div className="flex items-center justify-between md:justify-end gap-3 pt-2 md:pt-0 border-t md:border-t-0 border-botanical-taupe/60 shrink-0">
+                      <div className="flex items-center justify-between md:justify-end gap-4 pt-2 md:pt-0 border-t md:border-t-0 border-botanical-taupe/60 shrink-0">
                         <div className="tabular-nums md:text-right">
                           <p className="text-[11px] text-botanical-muted">Balance Due</p>
-                          <p className="text-base font-semibold text-botanical-text">
+                          <p className="text-base sm:text-lg font-bold text-botanical-text">
                             {formatINR(exp.upcomingAmount)}
                           </p>
                         </div>

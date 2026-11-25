@@ -44,7 +44,7 @@ export function WeddingHeroBanner({
         </p>
       </div>
 
-      <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+      <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2.5 shrink-0">
         <Button
           variant="secondary"
           icon={<FolderPlus className="w-4 h-4" strokeWidth={1.5} />}

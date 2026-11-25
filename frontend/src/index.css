@@ -18,6 +18,7 @@
   --color-botanical-sage-soft: #A9AC8D;
 
   --color-botanical-gold: #C49A52;
+  --color-botanical-gold-dark: #9B742E;
   --color-botanical-gold-light: #D8B978;
   --color-botanical-terracotta: #B98B61;
 
@@ -45,7 +46,7 @@
 }
 
 .tabular-nums {
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 .no-scrollbar::-webkit-scrollbar {

@@ -61,7 +61,7 @@ export function Sidebar({
               {brideInitial}&amp;{groomInitial}
             </div>
             <div className={['min-w-0', tabletExpanded ? 'block' : 'md:hidden lg:block'].join(' ')}>
-              <p className="font-serif text-lg font-semibold text-botanical-text truncate leading-tight">
+              <p className="font-serif text-base font-semibold text-botanical-text line-clamp-2 leading-snug">
                 {profile.brideName} &amp; {profile.groomName}
               </p>
               <p className="text-xs text-botanical-muted tabular-nums mt-0.5">

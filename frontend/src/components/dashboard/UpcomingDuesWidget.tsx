@@ -23,7 +23,7 @@ export function UpcomingDuesWidget({
   const topFive = expenses.slice(0, 5);
 
   return (
-    <Card padding="md" className="flex flex-col justify-between h-full">
+    <Card padding="md" className="flex flex-col gap-4">
       <div className="space-y-4">
         <div className="flex items-center justify-between gap-2">
           <div>
@@ -77,7 +77,7 @@ export function UpcomingDuesWidget({
                 </div>
 
                 <div className="flex items-center gap-2.5 shrink-0">
-                  <span className="text-sm font-semibold text-botanical-text tabular-nums">
+                  <span className="text-sm sm:text-base font-bold text-botanical-text tabular-nums">
                     {formatINR(expense.upcomingAmount)}
                   </span>
                   <Button

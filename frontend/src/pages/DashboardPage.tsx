@@ -71,7 +71,7 @@ export function DashboardPage({ onOpenAddExpense }: DashboardPageProps) {
 
       <MasterBudgetBar summary={summary} />
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 lg:items-start gap-6">
         <Card padding="md" className="lg:col-span-7 space-y-4">
           <div className="flex items-center justify-between gap-3">
             <div>
@@ -123,7 +123,7 @@ export function DashboardPage({ onOpenAddExpense }: DashboardPageProps) {
           )}
         </Card>
 
-        <div className="lg:col-span-5">
+        <div className="lg:col-span-5 lg:sticky lg:top-6">
           <UpcomingDuesWidget
             expenses={summary.upcomingExpenses}
             categories={categories}

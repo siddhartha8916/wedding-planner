@@ -45,7 +45,7 @@ export function ExpenseFilterBar({
       </div>
 
       <div className="flex flex-col sm:flex-row sm:items-center gap-2.5">
-        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5 sm:pb-0">
+        <div className="flex flex-wrap items-center gap-1.5">
           {statusPills.map((pill) => {
             const active = status === pill.value;
             return (

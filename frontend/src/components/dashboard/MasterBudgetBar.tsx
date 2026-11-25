@@ -16,19 +16,27 @@ export function MasterBudgetBar({ summary }: MasterBudgetBarProps) {
 
   return (
     <Card padding="md" className="space-y-3.5">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5">
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
         <div>
           <h2 className="font-serif text-xl font-semibold text-botanical-text">
             Master Budget Allocation
           </h2>
-          <p className="text-xs text-botanical-muted tabular-nums">
-            Committed {formatINR(summary.totalEstimated)} of {formatINR(summary.totalBudget)} target
+          <p className="text-sm text-botanical-text-tertiary tabular-nums mt-0.5">
+            Committed{' '}
+            <span className="font-semibold text-botanical-text">
+              {formatINR(summary.totalEstimated)}
+            </span>{' '}
+            of{' '}
+            <span className="font-semibold text-botanical-text">
+              {formatINR(summary.totalBudget)}
+            </span>{' '}
+            target
           </p>
         </div>
         {summary.contingencyPercent > 0 ? (
-          <p className="text-xs text-botanical-muted tabular-nums">
+          <p className="text-xs sm:text-sm text-botanical-text-tertiary tabular-nums">
             Safe ceiling (after {summary.contingencyPercent}% buffer):{' '}
-            <span className="font-medium text-botanical-text-secondary">
+            <span className="font-semibold text-botanical-text">
               {formatINR(summary.safeSpendableCeiling)}
             </span>
           </p>
@@ -54,20 +62,32 @@ export function MasterBudgetBar({ summary }: MasterBudgetBarProps) {
         ]}
       />
 
-      <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 text-xs text-botanical-muted">
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs sm:text-sm text-botanical-text-tertiary">
         <span className="inline-flex items-center gap-2 tabular-nums">
-          <span className="w-2.5 h-2.5 rounded-full bg-botanical-forest" />
-          Paid ({formatINR(summary.totalPaid)})
+          <span className="w-2.5 h-2.5 rounded-full bg-botanical-forest shrink-0" />
+          <span>Paid</span>
+          <span className="font-semibold text-botanical-forest">
+            {formatINR(summary.totalPaid)}
+          </span>
         </span>
         <span className="inline-flex items-center gap-2 tabular-nums">
-          <span className="w-2.5 h-2.5 rounded-full bg-botanical-gold-light" />
-          Upcoming Committed ({formatINR(summary.totalUpcoming)})
+          <span className="w-2.5 h-2.5 rounded-full bg-botanical-gold-light shrink-0" />
+          <span>Upcoming</span>
+          <span className="font-semibold text-botanical-gold-dark">
+            {formatINR(summary.totalUpcoming)}
+          </span>
         </span>
         <span className="inline-flex items-center gap-2 tabular-nums">
-          <span className="w-2.5 h-2.5 rounded-full bg-botanical-surface border border-botanical-beige" />
-          {summary.budgetLeft >= 0
-            ? `Remaining (${formatINR(summary.budgetLeft)})`
-            : `Over Budget (${formatINR(Math.abs(summary.budgetLeft))})`}
+          <span className="w-2.5 h-2.5 rounded-full bg-botanical-surface border border-botanical-beige shrink-0" />
+          <span>{summary.budgetLeft >= 0 ? 'Remaining' : 'Over Budget'}</span>
+          <span
+            className={[
+              'font-semibold',
+              summary.budgetLeft >= 0 ? 'text-botanical-text' : 'text-botanical-terracotta',
+            ].join(' ')}
+          >
+            {formatINR(Math.abs(summary.budgetLeft))}
+          </span>
         </span>
       </div>
     </Card>

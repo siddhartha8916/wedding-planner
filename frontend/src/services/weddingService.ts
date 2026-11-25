@@ -23,6 +23,9 @@ export const weddingService = {
   },
 
   resetAll(): Promise<WeddingProfile> {
-    return mockHandlers.wedding.resetAll();
+    if (env.useMockApi) return mockHandlers.wedding.resetAll();
+    return apiRequest<WeddingProfile>('/wedding/reset', {
+      method: 'POST',
+    });
   },
 };

@@ -2,10 +2,13 @@ import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Download, Printer, RotateCcw, Sparkles } from 'lucide-react';
+import { Download, LogOut, Printer, RotateCcw } from 'lucide-react';
+// import { Sparkles } from 'lucide-react';
+import { useAuth } from '../hooks/useAuth.ts';
 import { useDashboardSummary } from '../hooks/useDashboardSummary.ts';
 import { useToast } from '../hooks/useToast.ts';
-import { useResetWedding, useSaveWedding, useSeedDemo } from '../hooks/useWedding.ts';
+import { useResetWedding, useSaveWedding } from '../hooks/useWedding.ts';
+// import { useSeedDemo } from '../hooks/useWedding.ts';
 import { formatINR } from '../utils/currency.ts';
 import { downloadCSVFile, generateExpensesCSV } from '../utils/export.ts';
 import { PageHeader } from '../components/layout/PageHeader.tsx';
@@ -28,9 +31,10 @@ const profileSchema = z.object({
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
 export function SettingsPage() {
+  const { logout } = useAuth();
   const { profile, categories, expenses, summary, isLoading } = useDashboardSummary();
   const saveWedding = useSaveWedding();
-  const seedDemo = useSeedDemo();
+  // const seedDemo = useSeedDemo();
   const resetWedding = useResetWedding();
   const { showToast } = useToast();
 
@@ -103,6 +107,7 @@ export function SettingsPage() {
     window.print();
   };
 
+  /* Sample data loading disabled in UI
   const handleLoadDemo = async () => {
     try {
       await seedDemo.mutateAsync();
@@ -111,12 +116,13 @@ export function SettingsPage() {
       showToast('Could not load sample data.', 'terracotta');
     }
   };
+  */
 
   const handleConfirmReset = async () => {
     try {
       await resetWedding.mutateAsync();
       setResetModalOpen(false);
-      showToast('Local workspace reset.');
+      showToast('Wedding workspace reset.');
     } catch {
       showToast('Could not reset workspace.', 'terracotta');
     }
@@ -126,7 +132,7 @@ export function SettingsPage() {
     <div className="space-y-6">
       <PageHeader
         title="Wedding Settings"
-        subtitle="Manage couple details, export family reports, or reset preview data."
+        subtitle="Manage couple details, export family reports, reset workspace data, or sign out."
       />
 
       <Card padding="lg" className="no-print">
@@ -225,13 +231,14 @@ export function SettingsPage() {
 
         <Card padding="md" surface="ivory" className="space-y-3">
           <h2 className="font-serif text-xl font-semibold text-botanical-text">
-            Workspace Data Tools
+            Workspace &amp; Account
           </h2>
           <p className="text-xs text-botanical-muted">
-            Phase 1 stores your wedding data in browser localStorage behind REST-ready service
-            contracts.
+            Reset your wedding budget data to plan a fresh celebration, or sign out of your ledger
+            session.
           </p>
           <div className="flex flex-wrap gap-2.5 pt-1">
+            {/* Sample data loading disabled in UI
             <Button
               variant="secondary"
               loading={seedDemo.isPending}
@@ -240,12 +247,20 @@ export function SettingsPage() {
             >
               Load Sample Indian Wedding
             </Button>
+            */}
             <Button
               variant="danger"
               icon={<RotateCcw className="w-4 h-4" strokeWidth={1.5} />}
               onClick={() => setResetModalOpen(true)}
             >
-              Reset Local Data
+              Reset Data
+            </Button>
+            <Button
+              variant="secondary"
+              icon={<LogOut className="w-4 h-4" strokeWidth={1.5} />}
+              onClick={logout}
+            >
+              Log Out
             </Button>
           </div>
         </Card>
@@ -304,7 +319,7 @@ export function SettingsPage() {
       <Modal
         open={resetModalOpen}
         onClose={() => setResetModalOpen(false)}
-        title="Reset Local Data"
+        title="Reset Wedding Data"
         subtitle="Start fresh from Onboarding"
         footer={
           <>
@@ -322,8 +337,8 @@ export function SettingsPage() {
         }
       >
         <p className="text-sm text-botanical-text-tertiary">
-          This clears all saved categories, expenses, and payments from localStorage and returns you
-          to the Onboarding screen.
+          This clears all saved categories, expenses, and payments for this wedding and returns you
+          to the Onboarding screen so a new wedding can be planned.
         </p>
       </Modal>
     </div>

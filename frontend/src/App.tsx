@@ -1,14 +1,17 @@
 import { useState } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AuthProvider } from './components/auth/AuthProvider.tsx';
 import { ExpenseFormSheet } from './components/expenses/ExpenseFormSheet.tsx';
 import { AppShell } from './components/layout/AppShell.tsx';
 import { Skeleton } from './components/ui/Skeleton.tsx';
 import { ToastProvider } from './components/ui/Toast.tsx';
+import { useAuth } from './hooks/useAuth.ts';
 import { useWedding } from './hooks/useWedding.ts';
 import { CategoriesPage } from './pages/CategoriesPage.tsx';
 import { CategoryDetailPage } from './pages/CategoryDetailPage.tsx';
 import { DashboardPage } from './pages/DashboardPage.tsx';
+import { LoginPage } from './pages/LoginPage.tsx';
 import { OnboardingPage } from './pages/OnboardingPage.tsx';
 import { SettingsPage } from './pages/SettingsPage.tsx';
 import { UpcomingPaymentsPage } from './pages/UpcomingPaymentsPage.tsx';
@@ -22,7 +25,7 @@ const queryClient = new QueryClient({
   },
 });
 
-function AppRoutes() {
+function AuthenticatedRoutes() {
   const { data: profile, isLoading } = useWedding();
   const [quickAddOpen, setQuickAddOpen] = useState(false);
 
@@ -57,6 +60,7 @@ function AppRoutes() {
           <Route path="/categories/:categoryId" element={<CategoryDetailPage />} />
           <Route path="/upcoming" element={<UpcomingPaymentsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/login" element={<Navigate to="/" replace />} />
           <Route path="/onboarding" element={<Navigate to="/" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
@@ -70,14 +74,40 @@ function AppRoutes() {
   );
 }
 
+function AppRoutes() {
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-dvh bg-botanical-cream p-6 max-w-4xl mx-auto space-y-4">
+        <Skeleton variant="card" />
+        <Skeleton variant="row" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    );
+  }
+
+  return <AuthenticatedRoutes />;
+}
+
 export function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ToastProvider>
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
-      </ToastProvider>
+      <AuthProvider>
+        <ToastProvider>
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+        </ToastProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

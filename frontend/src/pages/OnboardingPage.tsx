@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Check, Plus, Sparkles } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, Plus } from 'lucide-react';
+// import { Sparkles } from 'lucide-react';
 import { STARTER_CATEGORIES, type StarterCategoryPreset } from '../config/presets.ts';
 import { useCategoryMutations } from '../hooks/useCategories.ts';
 import { useToast } from '../hooks/useToast.ts';
-import { useSaveWedding, useSeedDemo } from '../hooks/useWedding.ts';
+import { useSaveWedding } from '../hooks/useWedding.ts';
+// import { useSeedDemo } from '../hooks/useWedding.ts';
 import { formatINR } from '../utils/currency.ts';
 import { formatLongDate, getDaysRemaining } from '../utils/date.ts';
 import { CategoryIcon } from '../components/categories/CategoryIcon.tsx';
@@ -17,7 +19,7 @@ export function OnboardingPage() {
   const navigate = useNavigate();
   const { showToast } = useToast();
   const saveWedding = useSaveWedding();
-  const seedDemo = useSeedDemo();
+  // const seedDemo = useSeedDemo();
   const { createCategory } = useCategoryMutations();
 
   const [step, setStep] = useState<1 | 2>(1);
@@ -112,6 +114,7 @@ export function OnboardingPage() {
     }
   };
 
+  /* Sample data loading disabled in UI
   const handleExploreDemo = async () => {
     try {
       await seedDemo.mutateAsync();
@@ -121,6 +124,7 @@ export function OnboardingPage() {
       showToast('Could not load sample wedding data.', 'terracotta');
     }
   };
+  */
 
   return (
     <div className="min-h-dvh bg-botanical-cream px-4 py-8 sm:py-12 flex flex-col items-center justify-center">
@@ -319,12 +323,13 @@ export function OnboardingPage() {
           )}
         </Card>
 
+        {/* Sample data loading disabled in UI
         <div className="text-center">
           <button
             type="button"
             disabled={seedDemo.isPending}
             onClick={handleExploreDemo}
-            className="inline-flex items-center gap-2 text-sm font-medium text-botanical-forest hover:text-botanical-forest/80 underline underline-offset-4 cursor-pointer min-h-[44px] px-3"
+            className="inline-flex items-center gap-2 text-sm font-medium text-botanical-forest hover:text-botanical-forest/80 underline underline-offset-4 cursor-pointer min-h-11 px-3"
           >
             <Sparkles className="w-4 h-4" strokeWidth={1.5} />
             <span>
@@ -334,6 +339,7 @@ export function OnboardingPage() {
             </span>
           </button>
         </div>
+        */}
       </div>
     </div>
   );

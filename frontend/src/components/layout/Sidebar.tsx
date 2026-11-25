@@ -5,9 +5,11 @@ import {
   ChevronRight,
   FolderKanban,
   LayoutDashboard,
+  LogOut,
   Plus,
   Settings,
 } from 'lucide-react';
+import { useAuth } from '../../hooks/useAuth.ts';
 import type { WeddingProfile } from '../../types/wedding.ts';
 import { getDaysRemaining } from '../../utils/date.ts';
 import { Button } from '../ui/Button.tsx';
@@ -32,6 +34,7 @@ export function Sidebar({
   tabletExpanded,
   onToggleTabletExpanded,
 }: SidebarProps) {
+  const { logout } = useAuth();
   const daysLeft = getDaysRemaining(profile.weddingDate);
   const brideInitial = profile.brideName.trim().charAt(0).toUpperCase() || 'B';
   const groomInitial = profile.groomName.trim().charAt(0).toUpperCase() || 'G';
@@ -116,16 +119,26 @@ export function Sidebar({
           })}
         </nav>
 
-        <div className="p-3 border-t border-botanical-taupe">
+        <div className="p-3 border-t border-botanical-taupe space-y-2">
           {tabletExpanded ? (
-            <Button
-              variant="primary"
-              fullWidth
-              icon={<Plus className="w-4 h-4" strokeWidth={1.5} />}
-              onClick={onQuickAddExpense}
-            >
-              Add Expense
-            </Button>
+            <>
+              <Button
+                variant="primary"
+                fullWidth
+                icon={<Plus className="w-4 h-4" strokeWidth={1.5} />}
+                onClick={onQuickAddExpense}
+              >
+                Add Expense
+              </Button>
+              <Button
+                variant="ghost"
+                fullWidth
+                icon={<LogOut className="w-4 h-4" strokeWidth={1.5} />}
+                onClick={logout}
+              >
+                Log Out
+              </Button>
+            </>
           ) : (
             <>
               <button
@@ -133,11 +146,20 @@ export function Sidebar({
                 onClick={onQuickAddExpense}
                 title="Add Expense"
                 aria-label="Add Expense"
-                className="hidden md:flex lg:hidden w-full min-h-[44px] rounded-lg bg-botanical-forest text-botanical-white items-center justify-center hover:bg-botanical-forest/90 cursor-pointer"
+                className="hidden md:flex lg:hidden w-full min-h-11 rounded-lg bg-botanical-forest text-botanical-white items-center justify-center hover:bg-botanical-forest/90 cursor-pointer"
               >
                 <Plus className="w-5 h-5" strokeWidth={1.5} />
               </button>
-              <div className="hidden lg:block">
+              <button
+                type="button"
+                onClick={logout}
+                title="Log Out"
+                aria-label="Log Out"
+                className="hidden md:flex lg:hidden w-full min-h-11 rounded-lg text-botanical-text-secondary hover:bg-botanical-surface/80 items-center justify-center cursor-pointer"
+              >
+                <LogOut className="w-5 h-5" strokeWidth={1.5} />
+              </button>
+              <div className="hidden lg:block space-y-2">
                 <Button
                   variant="primary"
                   fullWidth
@@ -145,6 +167,14 @@ export function Sidebar({
                   onClick={onQuickAddExpense}
                 >
                   Add Expense
+                </Button>
+                <Button
+                  variant="ghost"
+                  fullWidth
+                  icon={<LogOut className="w-4 h-4" strokeWidth={1.5} />}
+                  onClick={logout}
+                >
+                  Log Out
                 </Button>
               </div>
             </>

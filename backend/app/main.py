@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse
 
 from app.config import Settings
 from app.db import create_mongo_client, ensure_indexes, seed_default_user
-from app.routers import auth, wedding
+from app.routers import auth, categories, wedding
 
 
 def create_app(settings_override: Settings | None = None) -> FastAPI:
@@ -43,6 +43,7 @@ def create_app(settings_override: Settings | None = None) -> FastAPI:
 
     app.include_router(auth.router, prefix="/api/v1")
     app.include_router(wedding.router, prefix="/api/v1")
+    app.include_router(categories.router, prefix="/api/v1")
 
     @app.get("/health", tags=["health"])
     async def health(request: Request) -> JSONResponse:

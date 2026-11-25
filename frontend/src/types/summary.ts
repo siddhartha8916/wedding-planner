@@ -1,4 +1,4 @@
-import type { Category, ContributorSide, Expense, ExpenseStatus } from './wedding.ts';
+import type { Category, Expense, ExpenseStatus } from './wedding.ts';
 
 export interface ExpenseWithMetrics extends Expense {
   paidAmount: number;
@@ -18,8 +18,6 @@ export interface CategoryMetrics {
   isOverCap: boolean;
 }
 
-export type ContributorBreakdown = Record<ContributorSide, number>;
-
 export interface DashboardSummary {
   totalBudget: number;
   contingencyPercent: number;
@@ -36,6 +34,5 @@ export interface DashboardSummary {
   pendingExpenseCount: number;
   overdueExpenseCount: number;
   categoryMetrics: CategoryMetrics[];
-  contributorTotals: ContributorBreakdown;
   upcomingExpenses: ExpenseWithMetrics[];
 }

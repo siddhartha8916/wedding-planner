@@ -1,4 +1,4 @@
-import type { CeremonyTag, ContributorSide, PaymentMethod } from '../types/wedding.ts';
+import type { CeremonyTag, PaymentMethod } from '../types/wedding.ts';
 
 export interface StarterCategoryPreset {
   name: string;
@@ -99,10 +99,4 @@ export const PAYMENT_METHOD_OPTIONS: { value: PaymentMethod; label: string }[] =
   { value: 'cash', label: 'Cash' },
   { value: 'card', label: 'Card' },
   { value: 'cheque', label: 'Cheque' },
-];
-
-export const CONTRIBUTOR_SIDE_OPTIONS: { value: ContributorSide; label: string }[] = [
-  { value: 'joint', label: 'Joint' },
-  { value: 'bride', label: "Bride's Side" },
-  { value: 'groom', label: "Groom's Side" },
 ];

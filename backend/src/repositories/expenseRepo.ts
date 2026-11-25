@@ -3,7 +3,6 @@ import { makeId, utcNowIso } from '../db.ts';
 import { computeExpenseStatus } from '../services/calculations.ts';
 import type {
   CeremonyTag,
-  ContributorSide,
   Expense,
   ExpenseDoc,
   ExpenseStatus,
@@ -26,7 +25,6 @@ export function docToExpense(doc: ExpenseDoc): Expense {
       paidDate: p.paidDate,
       label: p.label,
       method: p.method,
-      paidBy: p.paidBy,
     };
     if (p.note !== undefined && p.note !== null) {
       rec.note = p.note;
@@ -59,7 +57,6 @@ export async function listExpenses(
     categoryId?: string;
     status?: ExpenseStatus;
     ceremony?: string;
-    paidBy?: ContributorSide;
     search?: string;
   },
 ): Promise<ExpenseDoc[]> {
@@ -77,10 +74,6 @@ export async function listExpenses(
     } else {
       andConditions.push({ ceremony: filters.ceremony as CeremonyTag });
     }
-  }
-
-  if (filters.paidBy) {
-    andConditions.push({ 'payments.paidBy': filters.paidBy });
   }
 
   if (filters.search && filters.search.trim().length > 0) {
@@ -126,7 +119,6 @@ export async function createExpense(
       paidDate: string;
       label: string;
       method: PaymentMethod;
-      paidBy: ContributorSide;
       note?: string | null;
     } | null;
   },
@@ -145,7 +137,6 @@ export async function createExpense(
       paidDate: adv.paidDate,
       label: adv.label || 'Advance Deposit',
       method: adv.method,
-      paidBy: adv.paidBy,
       note: adv.note ?? null,
     });
   }
@@ -243,7 +234,6 @@ export async function addPayment(
     paidDate: string;
     label: string;
     method: PaymentMethod;
-    paidBy: ContributorSide;
     note?: string | null;
   },
 ): Promise<ExpenseDoc | null> {
@@ -254,7 +244,6 @@ export async function addPayment(
     paidDate: payload.paidDate,
     label: payload.label || 'Installment',
     method: payload.method,
-    paidBy: payload.paidBy,
     note: payload.note ?? null,
   };
 

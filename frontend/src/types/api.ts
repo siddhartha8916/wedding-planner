@@ -1,6 +1,5 @@
 import type {
   CeremonyTag,
-  ContributorSide,
   ExpenseStatus,
   PaymentMethod,
   PaymentRecord,
@@ -39,7 +38,6 @@ export interface ExpenseListFilters {
   categoryId?: string;
   status?: ExpenseStatus | 'all';
   ceremony?: CeremonyTag | 'all';
-  paidBy?: ContributorSide | 'all';
   search?: string;
 }
 
@@ -48,7 +46,6 @@ export interface CreatePaymentPayload {
   paidDate: string;
   label: string;
   method: PaymentMethod;
-  paidBy: ContributorSide;
   note?: string;
 }
 

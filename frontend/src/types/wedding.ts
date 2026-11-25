@@ -8,7 +8,6 @@ export type CeremonyTag =
   | 'reception';
 
 export type PaymentMethod = 'upi' | 'bank_transfer' | 'cash' | 'card' | 'cheque';
-export type ContributorSide = 'joint' | 'bride' | 'groom';
 export type ExpenseStatus = 'unpaid' | 'partial' | 'paid' | 'overdue';
 
 export interface WeddingProfile {
@@ -42,7 +41,6 @@ export interface PaymentRecord {
   paidDate: string;
   label: string;
   method: PaymentMethod;
-  paidBy: ContributorSide;
   note?: string;
 }
 

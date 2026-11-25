@@ -62,7 +62,6 @@ describe('financial calculation utilities', () => {
             paidDate: '2026-11-10',
             label: 'Advance Deposit',
             method: 'upi',
-            paidBy: 'joint',
           },
         ],
       }),
@@ -83,7 +82,6 @@ describe('financial calculation utilities', () => {
             paidDate: '2026-11-10',
             label: 'Advance Deposit',
             method: 'upi',
-            paidBy: 'joint',
           },
         ],
       }),
@@ -102,7 +100,6 @@ describe('financial calculation utilities', () => {
             paidDate: '2026-11-18',
             label: 'Full Settlement',
             method: 'bank_transfer',
-            paidBy: 'bride',
           },
         ],
       }),
@@ -124,7 +121,6 @@ describe('financial calculation utilities', () => {
             paidDate: '2026-11-10',
             label: 'Overpayment',
             method: 'upi',
-            paidBy: 'groom',
           },
         ],
       }),
@@ -150,7 +146,6 @@ describe('financial calculation utilities', () => {
           paidDate: '2026-11-10',
           label: 'Advance',
           method: 'upi',
-          paidBy: 'bride',
         },
       ],
     });
@@ -173,8 +168,6 @@ describe('financial calculation utilities', () => {
     assert.equal(summary.totalPaid, 50000);
     assert.equal(summary.totalUpcoming, 185000);
     assert.equal(summary.budgetLeft, 2265000);
-    assert.equal(summary.contributorTotals.bride, 50000);
-    assert.equal(summary.contributorTotals.joint, 0);
 
     const zeroBudgetSummary = computeDashboardSummary(
       { ...baseProfile, totalBudget: 0 },

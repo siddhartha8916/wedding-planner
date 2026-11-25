@@ -4,7 +4,6 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   CEREMONY_OPTIONS,
-  CONTRIBUTOR_SIDE_OPTIONS,
   PAYMENT_METHOD_OPTIONS,
 } from '../../config/presets.ts';
 import { useCategories } from '../../hooks/useCategories.ts';
@@ -13,7 +12,6 @@ import { useToast } from '../../hooks/useToast.ts';
 import type {
   Category,
   CeremonyTag,
-  ContributorSide,
   Expense,
   PaymentMethod,
 } from '../../types/wedding.ts';
@@ -72,7 +70,6 @@ function ExpenseFormSheetInner({
   const [advanceAmount, setAdvanceAmount] = useState(0);
   const [advanceDate, setAdvanceDate] = useState(() => getTodayIso());
   const [advanceMethod, setAdvanceMethod] = useState<PaymentMethod>('upi');
-  const [advancePaidBy, setAdvancePaidBy] = useState<ContributorSide>('joint');
 
   const {
     register,
@@ -144,7 +141,6 @@ function ExpenseFormSheetInner({
                       ? 'Full Settlement'
                       : 'Advance Deposit',
                   method: advanceMethod,
-                  paidBy: advancePaidBy,
                 }
               : undefined,
         });
@@ -260,7 +256,7 @@ function ExpenseFormSheetInner({
                     helperText={`Remaining upcoming balance: ${formatINR(remainingPreview)}`}
                   />
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     <Input
                       type="date"
                       label="Paid Date"
@@ -272,12 +268,6 @@ function ExpenseFormSheetInner({
                       value={advanceMethod}
                       onChange={(e) => setAdvanceMethod(e.target.value as PaymentMethod)}
                       options={PAYMENT_METHOD_OPTIONS}
-                    />
-                    <Select
-                      label="Paid By"
-                      value={advancePaidBy}
-                      onChange={(e) => setAdvancePaidBy(e.target.value as ContributorSide)}
-                      options={CONTRIBUTOR_SIDE_OPTIONS}
                     />
                   </div>
                 </div>

@@ -12,7 +12,6 @@ export const expenseService = {
     if (filters.categoryId) params.set('categoryId', filters.categoryId);
     if (filters.status && filters.status !== 'all') params.set('status', filters.status);
     if (filters.ceremony && filters.ceremony !== 'all') params.set('ceremony', filters.ceremony);
-    if (filters.paidBy && filters.paidBy !== 'all') params.set('paidBy', filters.paidBy);
     if (filters.search) params.set('search', filters.search);
     const qs = params.toString();
     return apiRequest<Expense[]>(`/expenses${qs ? `?${qs}` : ''}`);

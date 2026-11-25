@@ -1,6 +1,5 @@
 import type {
   CategoryMetrics,
-  ContributorBreakdown,
   DashboardSummary,
   ExpenseWithMetrics,
 } from '../types/summary.ts';
@@ -101,17 +100,6 @@ export function computeDashboardSummary(
   const upcomingPercentOfBudget =
     totalBudget > 0 ? Math.min(100, Math.round((totalUpcoming / totalBudget) * 100)) : 0;
 
-  const contributorTotals: ContributorBreakdown = {
-    joint: 0,
-    bride: 0,
-    groom: 0,
-  };
-  for (const exp of expenses) {
-    for (const payment of exp.payments) {
-      contributorTotals[payment.paidBy] += payment.amount;
-    }
-  }
-
   const pendingExpenses = enriched
     .filter((exp) => exp.upcomingAmount > 0)
     .sort((a, b) => {
@@ -144,7 +132,6 @@ export function computeDashboardSummary(
     pendingExpenseCount: pendingExpenses.length,
     overdueExpenseCount,
     categoryMetrics,
-    contributorTotals,
     upcomingExpenses: pendingExpenses,
   };
 }

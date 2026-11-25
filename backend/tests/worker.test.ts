@@ -233,7 +233,6 @@ describe('Cloudflare Worker API (workerd + MongoDB)', () => {
             paidDate: '2026-11-25',
             label: 'Advance Deposit',
             method: 'upi',
-            paidBy: 'joint',
           },
         }),
       })
@@ -253,7 +252,6 @@ describe('Cloudflare Worker API (workerd + MongoDB)', () => {
           paidDate: '2026-11-25',
           label: 'Full',
           method: 'card',
-          paidBy: 'bride',
         },
       }),
     });
@@ -268,10 +266,10 @@ describe('Cloudflare Worker API (workerd + MongoDB)', () => {
     ).json()) as Array<{ title: string }>;
     expect(search.map((e) => e.title)).toEqual(['Main Banquet & Buffet']);
 
-    const paidByBride = (await (
-      await workerFetch('/api/v1/expenses?paidBy=bride&status=paid', { headers })
+    const paidItems = (await (
+      await workerFetch('/api/v1/expenses?status=paid', { headers })
     ).json()) as Array<{ title: string }>;
-    expect(paidByBride.map((e) => e.title)).toEqual(['Mandap Flowers']);
+    expect(paidItems.map((e) => e.title)).toEqual(['Mandap Flowers']);
 
     const addPayRes = await workerFetch(`/api/v1/expenses/${exp1.id}/payments`, {
       method: 'POST',
@@ -281,7 +279,6 @@ describe('Cloudflare Worker API (workerd + MongoDB)', () => {
         paidDate: '2026-11-26',
         label: '2nd Installment',
         method: 'cash',
-        paidBy: 'groom',
       }),
     });
     expect(addPayRes.status).toBe(200);

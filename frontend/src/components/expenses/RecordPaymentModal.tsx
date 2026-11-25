@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { CONTRIBUTOR_SIDE_OPTIONS, PAYMENT_METHOD_OPTIONS } from '../../config/presets.ts';
+import { PAYMENT_METHOD_OPTIONS } from '../../config/presets.ts';
 import { usePaymentMutations } from '../../hooks/useExpenses.ts';
 import { useToast } from '../../hooks/useToast.ts';
 import type { ExpenseWithMetrics } from '../../types/summary.ts';
-import type { ContributorSide, PaymentMethod } from '../../types/wedding.ts';
+import type { PaymentMethod } from '../../types/wedding.ts';
 import { formatINR } from '../../utils/currency.ts';
 import { getTodayIso } from '../../utils/date.ts';
 import { Button } from '../ui/Button.tsx';
@@ -43,7 +43,6 @@ function RecordPaymentModalInner({
   const [paidDate, setPaidDate] = useState(() => getTodayIso());
   const [label, setLabel] = useState(() => getInitialLabel(expense, defaultSettleFull));
   const [method, setMethod] = useState<PaymentMethod>('upi');
-  const [paidBy, setPaidBy] = useState<ContributorSide>('joint');
   const [note, setNote] = useState('');
   const [error, setError] = useState('');
 
@@ -63,7 +62,6 @@ function RecordPaymentModalInner({
           paidDate,
           label: label.trim() || 'Installment',
           method,
-          paidBy,
           note: note.trim() || undefined,
         },
       });
@@ -139,20 +137,12 @@ function RecordPaymentModalInner({
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <Select
-            label="Payment Mode"
-            value={method}
-            onChange={(e) => setMethod(e.target.value as PaymentMethod)}
-            options={PAYMENT_METHOD_OPTIONS}
-          />
-          <Select
-            label="Paid By"
-            value={paidBy}
-            onChange={(e) => setPaidBy(e.target.value as ContributorSide)}
-            options={CONTRIBUTOR_SIDE_OPTIONS}
-          />
-        </div>
+        <Select
+          label="Payment Mode"
+          value={method}
+          onChange={(e) => setMethod(e.target.value as PaymentMethod)}
+          options={PAYMENT_METHOD_OPTIONS}
+        />
 
         <Input
           label="Note (optional)"

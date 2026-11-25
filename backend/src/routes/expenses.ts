@@ -13,7 +13,6 @@ import {
 } from '../repositories/expenseRepo.ts';
 import {
   ceremonySchema,
-  contributorSideSchema,
   createExpenseSchema,
   createPaymentSchema,
   expenseStatusSchema,
@@ -21,7 +20,7 @@ import {
   updateExpenseSchema,
 } from '../schemas/validators.ts';
 import { requireAuth } from '../security.ts';
-import type { AppVariables, ContributorSide, ExpenseStatus } from '../types.ts';
+import type { AppVariables, ExpenseStatus } from '../types.ts';
 
 export const expenseRoutes = new Hono<{ Bindings: Env; Variables: AppVariables }>();
 
@@ -32,7 +31,6 @@ expenseRoutes.get('/', async (c) => {
   const categoryId = c.req.query('categoryId') || undefined;
   const rawStatus = c.req.query('status');
   const rawCeremony = c.req.query('ceremony');
-  const rawPaidBy = c.req.query('paidBy');
   const search = c.req.query('search') || undefined;
 
   let status: ExpenseStatus | undefined;
@@ -53,17 +51,8 @@ expenseRoutes.get('/', async (c) => {
     ceremony = parsedCeremony.data;
   }
 
-  let paidBy: ContributorSide | undefined;
-  if (rawPaidBy && rawPaidBy !== 'all') {
-    const parsedPaidBy = contributorSideSchema.safeParse(rawPaidBy);
-    if (!parsedPaidBy.success) {
-      return c.json({ detail: parsedPaidBy.error.issues }, 422);
-    }
-    paidBy = parsedPaidBy.data;
-  }
-
   const docs = await withDb(c.env, (db) =>
-    listExpenses(db, user.id, { categoryId, status, ceremony, paidBy, search }),
+    listExpenses(db, user.id, { categoryId, status, ceremony, search }),
   );
   return c.json(docs.map(docToExpense));
 });

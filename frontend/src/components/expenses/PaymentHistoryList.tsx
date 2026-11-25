@@ -1,5 +1,5 @@
 import { Trash2 } from 'lucide-react';
-import { CONTRIBUTOR_SIDE_OPTIONS, PAYMENT_METHOD_OPTIONS } from '../../config/presets.ts';
+import { PAYMENT_METHOD_OPTIONS } from '../../config/presets.ts';
 import type { PaymentRecord } from '../../types/wedding.ts';
 import { formatINR } from '../../utils/currency.ts';
 import { formatDisplayDate } from '../../utils/date.ts';
@@ -12,7 +12,6 @@ export interface PaymentHistoryListProps {
 }
 
 const methodMap = new Map(PAYMENT_METHOD_OPTIONS.map((m) => [m.value, m.label]));
-const sideMap = new Map(CONTRIBUTOR_SIDE_OPTIONS.map((s) => [s.value, s.label]));
 
 export function PaymentHistoryList({
   payments,
@@ -35,7 +34,6 @@ export function PaymentHistoryList({
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-sm font-medium text-botanical-text">{payment.label}</span>
               <Badge tone="neutral">{methodMap.get(payment.method) ?? payment.method}</Badge>
-              <Badge tone="sage">{sideMap.get(payment.paidBy) ?? payment.paidBy}</Badge>
             </div>
             <p className="text-xs text-botanical-muted tabular-nums">
               {formatDisplayDate(payment.paidDate)}

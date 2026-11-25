@@ -31,8 +31,6 @@ export const paymentMethodSchema = z.enum([
   'cheque',
 ]);
 
-export const contributorSideSchema = z.enum(['joint', 'bride', 'groom']);
-
 export const expenseStatusSchema = z.enum(['unpaid', 'partial', 'paid', 'overdue']);
 
 export const loginSchema = z.object({
@@ -72,7 +70,6 @@ export const createPaymentSchema = z.object({
     .default('')
     .transform((v) => v.trim()),
   method: paymentMethodSchema,
-  paidBy: contributorSideSchema,
   note: optionalTrimmedString,
 });
 

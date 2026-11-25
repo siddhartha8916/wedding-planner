@@ -7,7 +7,6 @@ import type { ExpenseWithMetrics } from '../types/summary.ts';
 import { BudgetSummaryGrid } from '../components/dashboard/BudgetSummaryGrid.tsx';
 import { CategoryBreakdownChart } from '../components/dashboard/CategoryBreakdownChart.tsx';
 import { CategorySummaryList } from '../components/dashboard/CategorySummaryList.tsx';
-import { ContributorSummaryCard } from '../components/dashboard/ContributorSummaryCard.tsx';
 import { MasterBudgetBar } from '../components/dashboard/MasterBudgetBar.tsx';
 import { UpcomingDuesWidget } from '../components/dashboard/UpcomingDuesWidget.tsx';
 import { WeddingHeroBanner } from '../components/dashboard/WeddingHeroBanner.tsx';
@@ -132,8 +131,6 @@ export function DashboardPage({ onOpenAddExpense }: DashboardPageProps) {
           />
         </div>
       </div>
-
-      <ContributorSummaryCard totals={summary.contributorTotals} />
 
       <CategoryFormSheet
         open={categorySheetOpen}

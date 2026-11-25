@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CalendarCheck2 } from 'lucide-react';
-import { CEREMONY_OPTIONS, CONTRIBUTOR_SIDE_OPTIONS } from '../config/presets.ts';
+import { CEREMONY_OPTIONS } from '../config/presets.ts';
 import { useDashboardSummary } from '../hooks/useDashboardSummary.ts';
 import type { ExpenseWithMetrics } from '../types/summary.ts';
-import type { CeremonyTag, ContributorSide } from '../types/wedding.ts';
+import type { CeremonyTag } from '../types/wedding.ts';
 import { formatINR } from '../utils/currency.ts';
 import { formatDisplayDate, getTodayIso } from '../utils/date.ts';
 import { RecordPaymentModal } from '../components/expenses/RecordPaymentModal.tsx';
@@ -25,7 +25,6 @@ export function UpcomingPaymentsPage() {
 
   const [groupBy, setGroupBy] = useState<GroupMode>('timeline');
   const [ceremonyFilter, setCeremonyFilter] = useState<CeremonyTag | 'all'>('all');
-  const [sideFilter, setSideFilter] = useState<ContributorSide | 'all'>('all');
   const [payingExpense, setPayingExpense] = useState<ExpenseWithMetrics | null>(null);
 
   const categoryNameMap = useMemo(
@@ -39,13 +38,9 @@ export function UpcomingPaymentsPage() {
       if (ceremonyFilter !== 'all' && (exp.ceremony ?? 'general') !== ceremonyFilter) {
         return false;
       }
-      if (sideFilter !== 'all') {
-        const hasSide = exp.payments.some((p) => p.paidBy === sideFilter);
-        if (!hasSide) return false;
-      }
       return true;
     });
-  }, [summary?.upcomingExpenses, ceremonyFilter, sideFilter]);
+  }, [summary?.upcomingExpenses, ceremonyFilter]);
 
   const groups = useMemo(() => {
     if (groupBy === 'category') {
@@ -164,7 +159,7 @@ export function UpcomingPaymentsPage() {
           </button>
         </div>
 
-        <div className="grid grid-cols-2 gap-2.5 md:w-96">
+        <div className="md:w-52">
           <Select
             aria-label="Filter by ceremony"
             value={ceremonyFilter}
@@ -172,15 +167,6 @@ export function UpcomingPaymentsPage() {
             options={[
               { value: 'all', label: 'All Ceremonies' },
               ...CEREMONY_OPTIONS.map((c) => ({ value: c.value, label: c.label })),
-            ]}
-          />
-          <Select
-            aria-label="Filter by contributor side"
-            value={sideFilter}
-            onChange={(e) => setSideFilter(e.target.value as ContributorSide | 'all')}
-            options={[
-              { value: 'all', label: 'All Contributors' },
-              ...CONTRIBUTOR_SIDE_OPTIONS.map((s) => ({ value: s.value, label: s.label })),
             ]}
           />
         </div>

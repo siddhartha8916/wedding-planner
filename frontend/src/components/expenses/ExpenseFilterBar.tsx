@@ -40,7 +40,7 @@ export function ExpenseFilterBar({
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Search title, notes, vendor..."
-          className="w-full min-h-[44px] rounded-lg border border-botanical-beige bg-botanical-white pl-10 pr-3.5 py-2 text-base sm:text-sm text-botanical-text placeholder:text-botanical-disabled focus:outline-none focus:ring-2 focus:ring-botanical-forest/20 focus:border-botanical-forest"
+          className="w-full min-h-11 rounded-lg border border-botanical-beige bg-botanical-white pl-10 pr-3.5 py-2 text-base sm:text-sm text-botanical-text placeholder:text-botanical-disabled focus:outline-none focus:ring-2 focus:ring-botanical-forest/20 focus:border-botanical-forest"
         />
       </div>
 
@@ -54,7 +54,7 @@ export function ExpenseFilterBar({
                 type="button"
                 onClick={() => onStatusChange(pill.value)}
                 className={[
-                  'min-h-[38px] px-3 py-1.5 rounded-full text-xs font-medium border whitespace-nowrap transition-colors cursor-pointer shrink-0',
+                  'min-h-9.5 px-3 py-1.5 rounded-full text-xs font-medium border whitespace-nowrap transition-colors cursor-pointer shrink-0',
                   active
                     ? 'bg-botanical-forest text-botanical-white border-botanical-forest'
                     : 'bg-botanical-white text-botanical-text-secondary border-botanical-beige hover:bg-botanical-surface/70',

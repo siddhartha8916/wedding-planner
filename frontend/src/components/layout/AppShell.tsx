@@ -40,7 +40,7 @@ export function AppShell({ profile, onQuickAddExpense, children }: AppShellProps
         onQuickAddExpense={onQuickAddExpense}
       />
 
-      <main className="md:pl-[72px] lg:pl-60 print-full-width">
+      <main className="md:pl-18 lg:pl-60 print-full-width">
         <div className="px-4 py-5 pb-24 sm:px-5 sm:py-6 sm:pb-24 md:px-6 md:py-8 md:pb-10 lg:px-8 lg:py-9 lg:max-w-5xl xl:px-10 xl:py-10 xl:max-w-6xl mx-auto">
           {children}
         </div>

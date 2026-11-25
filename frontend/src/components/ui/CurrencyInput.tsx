@@ -41,7 +41,7 @@ export function CurrencyInput({
       ) : null}
       <div
         className={[
-          'flex items-center min-h-[44px] rounded-lg border bg-botanical-white overflow-hidden transition-colors',
+          'flex items-center min-h-11 rounded-lg border bg-botanical-white overflow-hidden transition-colors',
           'focus-within:ring-2 focus-within:ring-botanical-forest/20 focus-within:border-botanical-forest',
           error ? 'border-botanical-terracotta' : 'border-botanical-beige',
           disabled ? 'opacity-60 bg-botanical-surface/40' : '',
@@ -66,7 +66,7 @@ export function CurrencyInput({
           value={formatINRInputDisplay(value)}
           placeholder={placeholder}
           onChange={(e) => onChange(parseINRInput(e.target.value))}
-          className="w-full min-h-[44px] px-3 py-2 text-base sm:text-sm text-botanical-text bg-transparent tabular-nums placeholder:text-botanical-disabled focus:outline-none"
+          className="w-full min-h-11 px-3 py-2 text-base sm:text-sm text-botanical-text bg-transparent tabular-nums placeholder:text-botanical-disabled focus:outline-none"
         />
       </div>
       {error ? (

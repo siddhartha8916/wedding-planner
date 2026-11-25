@@ -26,7 +26,7 @@ export function MobileHeader({ profile, title, onQuickAddExpense }: MobileHeader
         type="button"
         onClick={onQuickAddExpense}
         aria-label="Add Expense"
-        className="min-w-[44px] min-h-[44px] -mr-2 flex items-center justify-center rounded-lg text-botanical-forest hover:bg-botanical-surface/70 cursor-pointer"
+        className="min-w-11 min-h-11 -mr-2 flex items-center justify-center rounded-lg text-botanical-forest hover:bg-botanical-surface/70 cursor-pointer"
       >
         <Plus className="w-5 h-5" strokeWidth={1.5} />
       </button>

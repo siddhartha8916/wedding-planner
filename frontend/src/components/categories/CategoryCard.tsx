@@ -45,7 +45,7 @@ export function CategoryCard({ metrics, onEdit, onDelete }: CategoryCardProps) {
               type="button"
               onClick={() => onEdit(category)}
               aria-label={`Edit ${category.name}`}
-              className="min-w-[36px] min-h-[36px] rounded-lg flex items-center justify-center text-botanical-muted hover:text-botanical-text hover:bg-botanical-surface/70 cursor-pointer"
+              className="min-w-9 min-h-9 rounded-lg flex items-center justify-center text-botanical-muted hover:text-botanical-text hover:bg-botanical-surface/70 cursor-pointer"
             >
               <Pencil className="w-4 h-4" strokeWidth={1.5} />
             </button>
@@ -53,7 +53,7 @@ export function CategoryCard({ metrics, onEdit, onDelete }: CategoryCardProps) {
               type="button"
               onClick={() => onDelete(metrics)}
               aria-label={`Delete ${category.name}`}
-              className="min-w-[36px] min-h-[36px] rounded-lg flex items-center justify-center text-botanical-muted hover:text-botanical-terracotta hover:bg-botanical-terracotta/15 cursor-pointer"
+              className="min-w-9 min-h-9 rounded-lg flex items-center justify-center text-botanical-muted hover:text-botanical-terracotta hover:bg-botanical-terracotta/15 cursor-pointer"
             >
               <Trash2 className="w-4 h-4" strokeWidth={1.5} />
             </button>

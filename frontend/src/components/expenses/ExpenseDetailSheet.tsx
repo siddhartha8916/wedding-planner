@@ -155,7 +155,7 @@ export function ExpenseDetailSheet({
           {expense.vendorPhone ? (
             <a
               href={`tel:${expense.vendorPhone.replace(/\s+/g, '')}`}
-              className="min-h-[40px] px-3 rounded-lg border border-botanical-beige bg-botanical-ivory/60 text-xs font-medium text-botanical-forest inline-flex items-center gap-1.5 hover:bg-botanical-surface"
+              className="min-h-10 px-3 rounded-lg border border-botanical-beige bg-botanical-ivory/60 text-xs font-medium text-botanical-forest inline-flex items-center gap-1.5 hover:bg-botanical-surface"
             >
               <Phone className="w-3.5 h-3.5" strokeWidth={1.5} />
               <span className="tabular-nums">{expense.vendorPhone}</span>

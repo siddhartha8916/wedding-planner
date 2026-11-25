@@ -40,7 +40,7 @@ export function Modal({ open, onClose, title, subtitle, children, footer }: Moda
             type="button"
             onClick={onClose}
             aria-label="Close modal"
-            className="min-w-[44px] min-h-[44px] -mr-2 -mt-2 flex items-center justify-center rounded-lg text-botanical-muted hover:text-botanical-text hover:bg-botanical-surface/70 cursor-pointer"
+            className="min-w-11 min-h-11 -mr-2 -mt-2 flex items-center justify-center rounded-lg text-botanical-muted hover:text-botanical-text hover:bg-botanical-surface/70 cursor-pointer"
           >
             <X className="w-5 h-5" strokeWidth={1.5} />
           </button>

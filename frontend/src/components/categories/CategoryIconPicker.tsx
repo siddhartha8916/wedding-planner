@@ -24,7 +24,7 @@ export function CategoryIconPicker({ value, onChange }: CategoryIconPickerProps)
               aria-pressed={selected}
               onClick={() => onChange(opt.key)}
               className={[
-                'min-h-[44px] rounded-lg border flex flex-col items-center justify-center gap-1 p-1.5 transition-colors cursor-pointer',
+                'min-h-11 rounded-lg border flex flex-col items-center justify-center gap-1 p-1.5 transition-colors cursor-pointer',
                 selected
                   ? 'bg-botanical-forest text-botanical-white border-botanical-forest'
                   : 'bg-botanical-white text-botanical-text-secondary border-botanical-beige hover:bg-botanical-surface/70',

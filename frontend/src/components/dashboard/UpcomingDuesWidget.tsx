@@ -34,7 +34,7 @@ export function UpcomingDuesWidget({
           </div>
           <Link
             to="/upcoming"
-            className="text-xs font-medium text-botanical-forest hover:underline inline-flex items-center gap-1 min-h-[36px] whitespace-nowrap shrink-0"
+            className="text-xs font-medium text-botanical-forest hover:underline inline-flex items-center gap-1 min-h-9 whitespace-nowrap shrink-0"
           >
             View all
             <ArrowRight className="w-3.5 h-3.5" strokeWidth={1.5} />

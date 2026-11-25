@@ -74,7 +74,7 @@ export function ResponsiveSheet({
             type="button"
             onClick={onClose}
             aria-label="Close panel"
-            className="min-w-[44px] min-h-[44px] -mr-2 -mt-1 flex items-center justify-center rounded-lg text-botanical-muted hover:text-botanical-text hover:bg-botanical-surface/70 transition-colors cursor-pointer"
+            className="min-w-11 min-h-11 -mr-2 -mt-1 flex items-center justify-center rounded-lg text-botanical-muted hover:text-botanical-text hover:bg-botanical-surface/70 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" strokeWidth={1.5} />
           </button>

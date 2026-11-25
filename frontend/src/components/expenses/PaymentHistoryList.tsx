@@ -52,7 +52,7 @@ export function PaymentHistoryList({
               disabled={isDeleting}
               onClick={() => onDeletePayment(payment.id)}
               aria-label={`Remove payment ${payment.label}`}
-              className="min-w-[36px] min-h-[36px] rounded-lg flex items-center justify-center text-botanical-muted hover:text-botanical-terracotta hover:bg-botanical-terracotta/15 cursor-pointer disabled:opacity-50"
+              className="min-w-9 min-h-9 rounded-lg flex items-center justify-center text-botanical-muted hover:text-botanical-terracotta hover:bg-botanical-terracotta/15 cursor-pointer disabled:opacity-50"
             >
               <Trash2 className="w-4 h-4" strokeWidth={1.5} />
             </button>

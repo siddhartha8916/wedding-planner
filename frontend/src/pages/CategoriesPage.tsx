@@ -104,7 +104,7 @@ export function CategoriesPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search categories..."
-            className="w-full min-h-[44px] rounded-lg border border-botanical-beige bg-botanical-white pl-10 pr-3.5 py-2 text-base sm:text-sm text-botanical-text placeholder:text-botanical-disabled focus:outline-none focus:ring-2 focus:ring-botanical-forest/20 focus:border-botanical-forest"
+            className="w-full min-h-11 rounded-lg border border-botanical-beige bg-botanical-white pl-10 pr-3.5 py-2 text-base sm:text-sm text-botanical-text placeholder:text-botanical-disabled focus:outline-none focus:ring-2 focus:ring-botanical-forest/20 focus:border-botanical-forest"
           />
         </div>
 
@@ -161,7 +161,7 @@ export function CategoriesPage() {
               setEditingCategory(null);
               setFormOpen(true);
             }}
-            className="min-h-[168px] rounded-xl border border-dashed border-botanical-beige bg-botanical-white/50 hover:bg-botanical-white hover:border-botanical-forest/50 transition-colors p-6 flex flex-col items-center justify-center gap-2 text-botanical-muted hover:text-botanical-forest cursor-pointer"
+            className="min-h-42 rounded-xl border border-dashed border-botanical-beige bg-botanical-white/50 hover:bg-botanical-white hover:border-botanical-forest/50 transition-colors p-6 flex flex-col items-center justify-center gap-2 text-botanical-muted hover:text-botanical-forest cursor-pointer"
           >
             <div className="w-10 h-10 rounded-full bg-botanical-ivory border border-botanical-beige flex items-center justify-center">
               <Plus className="w-5 h-5" strokeWidth={1.5} />

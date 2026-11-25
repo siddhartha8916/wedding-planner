@@ -142,7 +142,7 @@ export function UpcomingPaymentsPage() {
             type="button"
             onClick={() => setGroupBy('timeline')}
             className={[
-              'min-h-[38px] px-3.5 rounded-md text-xs font-medium cursor-pointer transition-colors',
+              'min-h-9.5 px-3.5 rounded-md text-xs font-medium cursor-pointer transition-colors',
               groupBy === 'timeline'
                 ? 'bg-botanical-white text-botanical-text border border-botanical-beige'
                 : 'text-botanical-muted hover:text-botanical-text',
@@ -154,7 +154,7 @@ export function UpcomingPaymentsPage() {
             type="button"
             onClick={() => setGroupBy('category')}
             className={[
-              'min-h-[38px] px-3.5 rounded-md text-xs font-medium cursor-pointer transition-colors',
+              'min-h-9.5 px-3.5 rounded-md text-xs font-medium cursor-pointer transition-colors',
               groupBy === 'category'
                 ? 'bg-botanical-white text-botanical-text border border-botanical-beige'
                 : 'text-botanical-muted hover:text-botanical-text',

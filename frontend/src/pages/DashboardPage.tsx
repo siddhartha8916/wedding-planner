@@ -91,7 +91,7 @@ export function DashboardPage({ onOpenAddExpense }: DashboardPageProps) {
                 onClick={() => setBreakdownView('list')}
                 aria-label="List view"
                 className={[
-                  'min-h-[34px] px-2.5 rounded-md text-xs font-medium inline-flex items-center gap-1.5 cursor-pointer transition-colors',
+                  'min-h-8.5 px-2.5 rounded-md text-xs font-medium inline-flex items-center gap-1.5 cursor-pointer transition-colors',
                   breakdownView === 'list'
                     ? 'bg-botanical-white text-botanical-text border border-botanical-beige'
                     : 'text-botanical-muted hover:text-botanical-text',
@@ -105,7 +105,7 @@ export function DashboardPage({ onOpenAddExpense }: DashboardPageProps) {
                 onClick={() => setBreakdownView('chart')}
                 aria-label="Chart view"
                 className={[
-                  'min-h-[34px] px-2.5 rounded-md text-xs font-medium inline-flex items-center gap-1.5 cursor-pointer transition-colors',
+                  'min-h-8.5 px-2.5 rounded-md text-xs font-medium inline-flex items-center gap-1.5 cursor-pointer transition-colors',
                   breakdownView === 'chart'
                     ? 'bg-botanical-white text-botanical-text border border-botanical-beige'
                     : 'text-botanical-muted hover:text-botanical-text',

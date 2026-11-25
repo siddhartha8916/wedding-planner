@@ -27,7 +27,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         ref={ref}
         id={inputId}
         className={[
-          'w-full min-h-[44px] rounded-lg border bg-botanical-white px-3.5 py-2 text-base sm:text-sm text-botanical-text',
+          'w-full min-h-11 rounded-lg border bg-botanical-white px-3.5 py-2 text-base sm:text-sm text-botanical-text',
           'placeholder:text-botanical-disabled transition-colors',
           'focus:outline-none focus:ring-2 focus:ring-botanical-forest/20 focus:border-botanical-forest',
           error ? 'border-botanical-terracotta' : 'border-botanical-beige',

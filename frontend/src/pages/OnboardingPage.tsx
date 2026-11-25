@@ -240,7 +240,7 @@ export function OnboardingPage() {
                       type="button"
                       onClick={() => toggleCategory(preset)}
                       className={[
-                        'min-h-[44px] px-3.5 py-2 rounded-xl border text-sm font-medium inline-flex items-center gap-2 transition-colors cursor-pointer',
+                        'min-h-11 px-3.5 py-2 rounded-xl border text-sm font-medium inline-flex items-center gap-2 transition-colors cursor-pointer',
                         selected
                           ? 'bg-botanical-forest text-botanical-white border-botanical-forest'
                           : 'bg-botanical-white text-botanical-text-secondary border-botanical-beige hover:bg-botanical-surface/70',
@@ -259,7 +259,7 @@ export function OnboardingPage() {
                       key={custom.name}
                       type="button"
                       onClick={() => toggleCategory(custom)}
-                      className="min-h-[44px] px-3.5 py-2 rounded-xl border bg-botanical-forest text-botanical-white border-botanical-forest text-sm font-medium inline-flex items-center gap-2 cursor-pointer"
+                      className="min-h-11 px-3.5 py-2 rounded-xl border bg-botanical-forest text-botanical-white border-botanical-forest text-sm font-medium inline-flex items-center gap-2 cursor-pointer"
                     >
                       <CategoryIcon name={custom.icon} className="w-4 h-4" />
                       <span>{custom.name}</span>
@@ -304,7 +304,7 @@ export function OnboardingPage() {
                     type="button"
                     disabled={isSubmitting}
                     onClick={() => handleComplete(true)}
-                    className="text-xs font-medium text-botanical-muted hover:text-botanical-text underline underline-offset-4 cursor-pointer min-h-[44px] px-2"
+                    className="text-xs font-medium text-botanical-muted hover:text-botanical-text underline underline-offset-4 cursor-pointer min-h-11 px-2"
                   >
                     Start with blank workspace
                   </button>

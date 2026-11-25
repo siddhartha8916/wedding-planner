@@ -24,7 +24,7 @@ export function Accordion({
         type="button"
         aria-expanded={open}
         onClick={() => setOpen((prev) => !prev)}
-        className="w-full min-h-[48px] px-4 py-3 flex items-center justify-between gap-3 text-left hover:bg-botanical-surface/50 transition-colors cursor-pointer"
+        className="w-full min-h-12 px-4 py-3 flex items-center justify-between gap-3 text-left hover:bg-botanical-surface/50 transition-colors cursor-pointer"
       >
         <div className="min-w-0">
           <div className="flex items-center gap-2">

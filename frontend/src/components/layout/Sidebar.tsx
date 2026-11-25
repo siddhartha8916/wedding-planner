@@ -52,7 +52,7 @@ export function Sidebar({
         aria-label="Primary navigation"
         className={[
           'no-print hidden md:flex flex-col fixed inset-y-0 left-0 z-40 bg-botanical-ivory border-r border-botanical-beige transition-all duration-200',
-          tabletExpanded ? 'w-60' : 'md:w-[72px] lg:w-60',
+          tabletExpanded ? 'w-60' : 'md:w-18 lg:w-60',
         ].join(' ')}
       >
         <div className="p-4 border-b border-botanical-taupe flex items-center justify-between gap-2">
@@ -78,7 +78,7 @@ export function Sidebar({
             type="button"
             onClick={onToggleTabletExpanded}
             aria-label={tabletExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
-            className="lg:hidden min-w-[36px] min-h-[36px] rounded-lg flex items-center justify-center text-botanical-muted hover:text-botanical-text hover:bg-botanical-surface cursor-pointer"
+            className="lg:hidden min-w-9 min-h-9 rounded-lg flex items-center justify-center text-botanical-muted hover:text-botanical-text hover:bg-botanical-surface cursor-pointer"
           >
             {tabletExpanded ? (
               <ChevronLeft className="w-4 h-4" strokeWidth={1.5} />
@@ -102,7 +102,7 @@ export function Sidebar({
                 title={item.label}
                 className={({ isActive }) =>
                   [
-                    'min-h-[44px] rounded-lg flex items-center gap-3 px-3 py-2 text-sm font-medium transition-colors',
+                    'min-h-11 rounded-lg flex items-center gap-3 px-3 py-2 text-sm font-medium transition-colors',
                     tabletExpanded ? 'justify-start' : 'md:justify-center lg:justify-start',
                     isActive
                       ? 'bg-botanical-forest text-botanical-white'

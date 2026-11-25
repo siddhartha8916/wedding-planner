@@ -1,9 +1,9 @@
 from datetime import UTC, datetime, timedelta
 from typing import Annotated
 
+import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-import jwt
 from pymongo.asynchronous.database import AsyncDatabase
 
 from app.config import Settings

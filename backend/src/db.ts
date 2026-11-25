@@ -1,5 +1,11 @@
 import { MongoClient, type Db } from 'mongodb';
-import type { CategoryDoc, ExpenseDoc, UserDoc, WeddingDoc } from './types.ts';
+import type {
+  CategoryDoc,
+  ExpenseDoc,
+  UserDoc,
+  WeddingBackupDoc,
+  WeddingDoc,
+} from './types.ts';
 
 let bootstrappedDbName: string | null = null;
 
@@ -18,6 +24,7 @@ export async function ensureIndexes(db: Db): Promise<void> {
     db.collection<CategoryDoc>('categories').createIndex({ userId: 1, sortOrder: 1 }),
     db.collection<ExpenseDoc>('expenses').createIndex({ userId: 1, categoryId: 1 }),
     db.collection<ExpenseDoc>('expenses').createIndex({ userId: 1, createdAt: -1 }),
+    db.collection<WeddingBackupDoc>('wedding_backups').createIndex({ userId: 1, backedUpAt: -1 }),
   ]);
 }
 

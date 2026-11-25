@@ -2,6 +2,7 @@ import { SignJWT } from 'jose';
 import { MongoClient } from 'mongodb';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { unstable_dev, type Unstable_DevWorker } from 'wrangler';
+import type { WeddingBackupDoc } from '../src/types.ts';
 
 const TEST_MONGODB_URI = 'mongodb://127.0.0.1:27017/?serverSelectionTimeoutMS=3000';
 const TEST_DB_NAME = 'wedding_planner_test';
@@ -42,6 +43,7 @@ describe('Cloudflare Worker API (workerd + MongoDB)', () => {
         db.collection('weddings').deleteMany({}),
         db.collection('categories').deleteMany({}),
         db.collection('expenses').deleteMany({}),
+        db.collection('wedding_backups').deleteMany({}),
       ]);
     });
 
@@ -70,6 +72,7 @@ describe('Cloudflare Worker API (workerd + MongoDB)', () => {
         db.collection('weddings').deleteMany({}),
         db.collection('categories').deleteMany({}),
         db.collection('expenses').deleteMany({}),
+        db.collection('wedding_backups').deleteMany({}),
       ]);
     });
   });
@@ -163,6 +166,25 @@ describe('Cloudflare Worker API (workerd + MongoDB)', () => {
       body: JSON.stringify({ name: 'Catering', icon: 'utensils' }),
     });
     expect(catRes.status).toBe(201);
+    const createdCat = (await catRes.json()) as { id: string; name: string };
+
+    const expRes = await workerFetch('/api/v1/expenses', {
+      method: 'POST',
+      headers: { ...headers, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        categoryId: createdCat.id,
+        title: 'Sangeet Catering',
+        estimatedAmount: 120000,
+        advancePayment: {
+          amount: 120000,
+          paidDate: '2026-11-25',
+          label: 'Direct Purchase',
+          method: 'upi',
+        },
+      }),
+    });
+    expect(expRes.status).toBe(201);
+    const createdExp = (await expRes.json()) as { id: string; title: string };
 
     const resetRes = await workerFetch('/api/v1/wedding/reset', {
       method: 'POST',
@@ -176,8 +198,31 @@ describe('Cloudflare Worker API (workerd + MongoDB)', () => {
     const catsAfterReset = await workerFetch('/api/v1/categories', { headers });
     expect(await catsAfterReset.json()).toEqual([]);
 
+    const expsAfterReset = await workerFetch('/api/v1/expenses', { headers });
+    expect(await expsAfterReset.json()).toEqual([]);
+
     const meAfterReset = await workerFetch('/api/v1/auth/me', { headers });
     expect(meAfterReset.status).toBe(200);
+    const meBody = (await meAfterReset.json()) as { id: string };
+
+    await withTestDb(async (db) => {
+      const backups = await db
+        .collection<WeddingBackupDoc>('wedding_backups')
+        .find({ userId: meBody.id })
+        .toArray();
+      expect(backups).toHaveLength(1);
+      const backup = backups[0]!;
+      expect(backup._id.startsWith('bkp-')).toBe(true);
+      expect(typeof backup.backedUpAt).toBe('string');
+      expect(backup.wedding?._id).toBe(w1.id);
+      expect(backup.wedding?.brideName).toBe('Aanya');
+      expect(backup.wedding?.isOnboarded).toBe(true);
+      expect(backup.categories).toHaveLength(1);
+      expect(backup.categories[0]?._id).toBe(createdCat.id);
+      expect(backup.expenses).toHaveLength(1);
+      expect(backup.expenses[0]?._id).toBe(createdExp.id);
+      expect(backup.expenses[0]?.payments).toHaveLength(1);
+    });
   });
 
   it('supports categories CRUD, cascade delete, expenses filters, and payments', async () => {

@@ -1,6 +1,12 @@
 import type { Db } from 'mongodb';
 import { makeId, utcNowIso } from '../db.ts';
-import type { WeddingDoc, WeddingProfile } from '../types.ts';
+import type {
+  CategoryDoc,
+  ExpenseDoc,
+  WeddingBackupDoc,
+  WeddingDoc,
+  WeddingProfile,
+} from '../types.ts';
 
 function defaultWeddingDoc(userId: string): WeddingDoc {
   const now = utcNowIso();
@@ -83,6 +89,22 @@ export async function saveWedding(
 }
 
 export async function resetWedding(db: Db, userId: string): Promise<WeddingDoc> {
+  const [wedding, categories, expenses] = await Promise.all([
+    db.collection<WeddingDoc>('weddings').findOne({ userId }),
+    db.collection<CategoryDoc>('categories').find({ userId }).toArray(),
+    db.collection<ExpenseDoc>('expenses').find({ userId }).toArray(),
+  ]);
+
+  const backupDoc: WeddingBackupDoc = {
+    _id: makeId('bkp'),
+    userId,
+    backedUpAt: utcNowIso(),
+    wedding,
+    categories,
+    expenses,
+  };
+  await db.collection<WeddingBackupDoc>('wedding_backups').insertOne(backupDoc);
+
   await Promise.all([
     db.collection('expenses').deleteMany({ userId }),
     db.collection('categories').deleteMany({ userId }),

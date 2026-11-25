@@ -126,6 +126,15 @@ export interface Expense {
   updatedAt: string;
 }
 
+export interface WeddingBackupDoc {
+  _id: string;
+  userId: string;
+  backedUpAt: string;
+  wedding: WeddingDoc | null;
+  categories: CategoryDoc[];
+  expenses: ExpenseDoc[];
+}
+
 export interface AppVariables {
   currentUser: UserPublic;
 }
